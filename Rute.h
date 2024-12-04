@@ -48,7 +48,7 @@ void DeleteLast_Edge(Graph &G, Addr_Node PNode, Addr_Edge &P);
 void DeleteAfter_Edge(Graph &G, Addr_Node PNode, Addr_Edge Prec, Addr_Edge &P);
 void Delete_Edge(Graph &G, Addr_Node PNode, Addr_Edge PEdge);
 void Disconnecting(Graph &G, string node1, string node2);
-//void findShortestRute(Graph &G, string startNode, string endNode); // blum diimplementasi
+//void findShortestRute(); // blum diimplementasi
 void ShowAll(Graph &G);
 
 #endif // RUTE_H_INCLUDED
