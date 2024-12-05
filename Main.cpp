@@ -1,14 +1,12 @@
-#include <iostream>
 #include "Rute.h"
 
-using namespace std;
-
-int main() {
+int main(int argc, char** argv) {
     Graph G;
     CreateGraph(G);
     int choice;
-    string node1, node2;
-    int distance;
+    string node1, node2, namaJalan;
+    double distance;
+    int waktu;
 
     do {
         cout << "Menu Pilihan:" << endl;
@@ -54,9 +52,13 @@ int main() {
                 getline(cin, node1);
                 cout << "Masukkan nama Gudang kedua: ";
                 getline(cin, node2);
+                cout << "Masukkan nama jalan: ";
+                getline(cin, namaJalan);
                 cout << "Masukkan jarak antar Gudang: ";
                 cin >> distance;
-                Connecting(G, node1, node2, distance);
+                cout << "Masukkan waktu perjalanan: ";
+                cin >> waktu;
+                Connecting(G, node1, node2, namaJalan, distance, waktu);
                 cout << "Gudang " << node1 << " dan " << node2 << " berhasil dihubungkan!" << endl << endl;
                 break;
             }
@@ -87,12 +89,13 @@ int main() {
             }
 
             case 6: {
+                TempList T;
                 cout << endl << "Masukkan nama Gudang pertama: ";
                 cin.ignore();
                 getline(cin, node1);
                 cout << "Masukkan nama Gudang kedua: ";
                 getline(cin, node2);
-                //FindShortestRoute(G, node1, node2);
+                AlJikstra(G, node1, node2, T);
                 break;
             }
 
@@ -106,6 +109,5 @@ int main() {
             }
         }
     } while (choice != 0);
-
     return 0;
 }

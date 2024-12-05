@@ -1,0 +1,11 @@
+# specific to CodeBlocks IDE
+*.layout
+*.depend
+# generated directories
+bin/
+obj/
+
+
+# gitignore build pada saat push
+build
+launch.json
