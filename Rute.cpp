@@ -1,3 +1,5 @@
+#include "Rute.h"
+
 void CreateGraph(Graph &G)
 {
     Start(G) = NULL;
