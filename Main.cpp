@@ -15,7 +15,7 @@ int main(int argc, char** argv) {
         cout << "3. Hubungkan Gudang" << endl;
         cout << "4. Putuskan Gudang" << endl;
         cout << "5. Tampilkan semua gudang & jarak" << endl;
-        cout << "6. Cari rute tercepat" << endl; //blm diimplementasi
+        cout << "6. Cari rute tercepat" << endl;
         cout << "0. Keluar" << endl;
         cout << "Pilih pilihan: ";
         cin >> choice;
