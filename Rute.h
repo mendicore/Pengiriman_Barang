@@ -1,6 +1,10 @@
 #ifndef RUTE_H_INCLUDED
 #define RUTE_H_INCLUDED
 
+#include <iostream>
+#include <string>
+using namespace std;
+
 #define Info(P) (P)->Info
 #define NextNode(P)  	(P)->NextNode
 #define NextEdge(P)  	(P)->NextEdge
