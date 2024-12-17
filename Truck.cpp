@@ -4,7 +4,7 @@
 using namespace std;
 
 void CreateTruck(TruckList &T) {
-    T.first = NULL;
+    first(T) = NULL;
 }
 
 adr_Truck Alokasi(Truck x) {
