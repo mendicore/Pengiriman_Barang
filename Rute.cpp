@@ -421,7 +421,7 @@ bool telahDikunjungi(TempList AT, string Gudang)
     return false;
 }
 
-void ShowAll(Graph &G) {
+void ShowAllGudangJalur(Graph &G) {
     cout<<"Graph G: " << endl;
 	if (Start(G) != Null)
     {
@@ -445,5 +445,23 @@ void ShowAll(Graph &G) {
 	else
     {
 		cout<< "Graf Kosong" << endl;
+	}
+}
+
+void ShowAllPomBensin(Graph_Pom_Bensin &GPB)
+{
+    if(Start(GPB) != Null)
+    {
+        for(Addr_Bensin B = Start(GPB); B != Null; B = nextBensinList(B))
+        {
+            cout << "Nama pom bensin: " << Info(B).nama << endl;
+            cout << "Lokasi pom bensin: " << Info(B).lokasi << endl;
+            cout << "Kapasitas tangki pom bensin: " << Info(B).kapasitas << endl;
+            cout << "Jumlah dispenser bensin : " << Info(B).jumlah << endl;
+        }
+    }
+    else
+    {
+		cout<< "Tidak ada pom bensin" << endl;
 	}
 }

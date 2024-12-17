@@ -24,6 +24,7 @@ int main(int argc, char** argv) {
         cout << "10. Putuskan Pom Bensin dengan Gudang" << endl;
         cout << "11. Tampilkan semua gudang & jarak" << endl;
         cout << "12. Cari rute tercepat" << endl;
+        cout << "13. Tampilkan pom bensin" << endl;
         cout << "0. Keluar" << endl;
         cout << "Pilih pilihan: ";
         cin >> choice;
@@ -135,7 +136,7 @@ int main(int argc, char** argv) {
                 getline(cin, station);
                 cout << "Masukkan nama jalan: ";
                 getline(cin, namaJalan);
-                cout << "Masukkan jarak antar Gudang: ";
+                cout << "Masukkan jarak Gudang dan Pom Bensin: ";
                 cin >> distance;
                 cout << "Masukkan waktu perjalanan: ";
                 cin >> waktu;
@@ -152,7 +153,7 @@ int main(int argc, char** argv) {
                 getline(cin, node2);
                 cout << "Masukkan nama jalan: ";
                 getline(cin, namaJalan);
-                cout << "Masukkan jarak antar Gudang: ";
+                cout << "Masukkan jarak Gudang dan Pom bensin: ";
                 cin >> distance;
                 cout << "Masukkan waktu perjalanan: ";
                 cin >> waktu;
@@ -168,14 +169,22 @@ int main(int argc, char** argv) {
                 cout << "Masukkan nama Pom bensin: ";
                 getline(cin, station);
 
-                Addr_Node PNode1 = FindNode(G, node1);
-                Addr_Node PNode2 = FindNode(G, station);
+                Addr_Bensin PBensin = FindBensin(GPB, station);
+                if(PBensin != Null)
+                {
+                    Addr_Node PNode1 = FindNode(G, node1);
+                    Addr_Node PNode2 = FindNode(G, station);
 
-                if (PNode1 != NULL && PNode2 != NULL) {
-                    Disconnecting(G, node1, station);
-                    cout << "Rute antara Gudang " << node1 << " dan Pom bensin " << station << " berhasil dihapus!" << endl << endl;
-                } else {
-                    cout << "Salah satu atau kedua bangunan tersebut tidak ditemukan!" << endl << endl;
+                    if (PNode1 != NULL && PNode2 != NULL) {
+                        Disconnecting(G, node1, station);
+                        cout << "Rute antara Gudang " << node1 << " dan Pom bensin " << station << " berhasil dihapus!" << endl << endl;
+                    } else {
+                        cout << "Salah satu atau kedua bangunan tersebut tidak ditemukan!" << endl << endl;
+                    }
+                }
+                else
+                {
+                    cout << "Pom bensin tidak ditemukan, tidak ada penghapusan!" << endl << endl;
                 }
                 break;
             }
@@ -187,22 +196,30 @@ int main(int argc, char** argv) {
                 cout << "Masukkan nama Gudang: ";
                 getline(cin, node2);
 
-                Addr_Node PNode1 = FindNode(G, station);
-                Addr_Node PNode2 = FindNode(G, node2);
+                Addr_Bensin PBensin = FindBensin(GPB, station);
+                if(PBensin != Null)
+                {
+                    Addr_Node PNode1 = FindNode(G, station);
+                    Addr_Node PNode2 = FindNode(G, node2);
 
-                if (PNode1 != NULL && PNode2 != NULL) {
-                    Disconnecting(G, station, node2);
-                    cout << "Rute antara Pom Bensin " << station << " dan Gudang " << node2 << " berhasil dihapus!" << endl << endl;
-                } else {
-                    cout << "Salah satu atau kedua bangunan tersebut tidak ditemukan!" << endl << endl;
+                    if (PNode1 != NULL && PNode2 != NULL) {
+                        Disconnecting(G, station, node2);
+                        cout << "Rute antara Pom Bensin " << station << " dan Gudang " << node2 << " berhasil dihapus!" << endl << endl;
+                    } else {
+                        cout << "Salah satu atau kedua bangunan tersebut tidak ditemukan!" << endl << endl;
+                    }
+                }
+                else
+                {
+                    cout << "Pom bensin tidak ditemukan, tidak ada penghapusan!" << endl << endl;
                 }
                 break;
             }
 
 
             case 11: {
-                cout << endl << "Menampilkan Gudang dan Jarak:" << endl;;
-                ShowAll(G);
+                cout << endl << "Menampilkan Gudang dan Jarak:" << endl;
+                ShowAllGudangJalur(G);
                 break;
             }
 
@@ -215,6 +232,13 @@ int main(int argc, char** argv) {
                 cout << "Masukkan nama Gudang kedua: ";
                 getline(cin, gudang2.nama);
                 AlJikstra(G, gudang1, gudang2, T);
+                break;
+            }
+
+            case 13:
+            {
+                cout << endl << "Semua Pom Bensin: " << endl;
+                ShowAllPomBensin(GPB);
                 break;
             }
 

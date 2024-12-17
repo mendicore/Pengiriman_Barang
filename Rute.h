@@ -126,5 +126,6 @@ void Disconnecting_Bensin_Gudang(Graph &G, string tempatBensin, string node2);
 void AlJikstra(Graph G, Infotype_Node Mulai, Infotype_Node selesai, TempList T);
 Addr_Edge findShortestRute(Graph G, Addr_Node AG, TempList AT);
 bool telahDikunjungi(TempList AT, string Gudang);
-void ShowAll(Graph &G);
+void ShowAllGudangJalur(Graph &G);
+void ShowAllPomBensin(Graph_Pom_Bensin &GPB);
 #endif // RUTE_H_INCLUDED
