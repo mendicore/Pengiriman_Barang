@@ -43,7 +43,6 @@ double KapasitasMaksimal(TruckList &T, string name);
 void HanyaLewat(TruckList &T, string name);
 bool ApakahMacetatauHambatan(Graph &G, string gudang, string jalur);
 void CatatJalur(Graph &G, string gudang, string jalur, string truk);
-string JalurAlternatif(Graph &G, string gudang, string jalur);
-void Pengiriman(TruckList &T, Graph &G, string gudang, string jalur, string truk);
-
+//string JalurAlternatif(Graph &G, string gudang, string jalur);
+void Pengiriman(TruckList &T, Graph &G, string gudang, string jalur, string truk, double bensin, double muatan, double jarak);
 #endif // TRUCK_H_INCLUDED

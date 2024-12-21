@@ -8,6 +8,11 @@ void CreatePomBensin(Graph_Pom_Bensin &GPB){
     Start(GPB) = Null;
 }
 
+void CreateTempList(TempList &L)
+{
+    L.pertama = Null;
+}
+
 Addr_TempList AlokasiTempList(Infotype_TempList x){
     Addr_TempList P = new tempListElmt;
     info(P) = x;
@@ -240,6 +245,16 @@ Addr_Edge FindEdge(Graph &G, Addr_Node PNode, string data) {
     return NULL;
 }
 
+string FindLastTempList(TempList L)
+{
+    Addr_TempList P = L.pertama;
+    while(P->nextTempList != nullptr)
+    {
+        P = P->nextTempList;
+    }
+    return P->Info;
+}
+
 void DeleteFirst_Bensin(Graph_Pom_Bensin &G, Addr_Bensin PBensin, Addr_Edge &P){
     if (FirstBensin(PBensin) != NULL)
     {
@@ -380,6 +395,88 @@ void AlJikstra(Graph G, Infotype_Node Mulai, Infotype_Node selesai, TempList T)
     }
 }
 
+void catatTempList(const TempList &asal, TempList &tujuan)
+{
+    CreateTempList(tujuan);
+
+    for(Addr_TempList P = asal.pertama; P != nullptr; P = P->nextTempList)
+    {
+        InsertLast_TempList(tujuan, AlokasiTempList(P->Info));
+    }
+}
+
+void asistenJalurAlternatifDFS(Graph &G, Infotype_Node &GudangSekarang, Infotype_Node &GudangTujuan, int WaktuSekarang, int &WaktuMinimal, TempList &L, TempList &jalanTerbaik, Infotype_Edge &namaJalanBlok)
+{
+    if(GudangSekarang.nama == GudangTujuan.nama)
+    {
+        if(WaktuSekarang < WaktuMinimal)
+        {
+            WaktuMinimal = WaktuSekarang;
+            catatTempList(L, jalanTerbaik);
+        }
+        return;
+    }
+
+    Addr_Node P = FindNode(G, GudangSekarang.nama);
+    if(P == nullptr)
+    {
+        return;
+    }
+
+    for(Addr_Edge Gjalan = P->FirstEdge; Gjalan != nullptr; Gjalan = Gjalan->NextEdge)
+    {
+        bool terblokir = (Gjalan->Info.namaJalan == namaJalanBlok.namaJalan);
+        bool dilewati = (telahDikunjungi(L, Gjalan->Info.bangunan.nama));
+
+        if(!terblokir && !dilewati)
+        {
+            InsertLast_TempList(L, AlokasiTempList(Gjalan->Info.bangunan.nama));
+            cout << "Menuju jalan " << Gjalan->Info.namaJalan << " menuju gudang " << Gjalan->Info.bangunan.nama << " memakan waktu " << Gjalan->Info.waktu << endl;
+            asistenJalurAlternatifDFS(G, Gjalan->Info.bangunan, GudangTujuan, WaktuSekarang + Gjalan->Info.waktu, WaktuMinimal, L, jalanTerbaik, namaJalanBlok);
+            Delete_Templist(L);
+            cout << "Kembali ke kota " << FindLastTempList(L) << endl;
+        }
+    }
+}
+
+void jalurAlternatifDFS(Graph &G, Infotype_Node &awalGudang, Infotype_Node &tujuanGudang, Infotype_Edge &namaJalanBlok)
+{
+    TempList dikunjungi;
+    CreateTempList(dikunjungi);
+
+    TempList jalurTerbaik;
+    CreateTempList(jalurTerbaik);
+
+    InsertLast_TempList(dikunjungi, AlokasiTempList(awalGudang.nama));
+
+    int waktuMinimal = INT_MAX;
+
+    asistenJalurAlternatifDFS(G, awalGudang, tujuanGudang, 0, waktuMinimal, dikunjungi, jalurTerbaik, namaJalanBlok);
+
+    if(waktuMinimal == INT_MAX)
+    {
+        cout << "Tidak ada jalur alternatif yang tersedia." << endl;
+        return;
+    }
+    else
+    {
+        cout << "Jalur alternatif terbaik membutuhkan waktu: " << waktuMinimal << endl;
+
+        cout << "Waktu tercepat: ";
+        bool cetakPertama = true;
+        for(Addr_TempList P = jalurTerbaik.pertama; P != Null; P = P->nextTempList)
+        {
+            if(!cetakPertama)
+            {
+                cout << " -> ";
+            }
+            cout << P->Info;
+            cetakPertama = false;
+        }
+        cout << endl;
+    }
+}
+
 Addr_Edge findShortestRute(Graph G, Addr_Node AG, TempList AT)
 {
     Addr_Edge E = FirstEdge(AG);
@@ -454,5 +551,36 @@ void ShowAllPomBensin(Graph_Pom_Bensin &GPB)
 	}
 }
 
+void ShowTempList(TempList L)
+{
+    for(Addr_TempList P = L.pertama; P != nullptr; P = P->nextTempList)
+    {
+        cout << P->Info << " ";
+    }
+    cout << endl;
+}
 
+void Delete_Templist(TempList &L)
+{
+    Addr_TempList P = L.pertama;
 
+    if(P == nullptr)
+    {
+        return;
+    }
+
+    if(P->nextTempList == nullptr)
+    {
+        delete P;
+        L.pertama = nullptr;
+        return;
+    }
+
+    while(P->nextTempList->nextTempList != nullptr)
+    {
+        P = P->nextTempList;
+    }
+
+    delete P->nextTempList;
+    P->nextTempList = nullptr;
+}

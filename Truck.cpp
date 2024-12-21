@@ -188,6 +188,12 @@ void CatatJalur(Graph &G, string gudang, string jalur, string truk){
     }
 }
 
+/*
+ Implementasi jalur alternatif
+ Kemungkinan: cari jalur yang bukan sama dengan jalur yang sedang dikirim
+             : jika ditemukan, tampilkan dan return jalur tersebut
+            : jika tidak ditemukan, tampilkan pesan "Tidak ada jalur alternatif tersedia"
+
 string JalurAlternatif(Graph &G, string gudang, string jalur){
     Addr_Node node = FindNode(G, gudang);
 
@@ -206,7 +212,7 @@ string JalurAlternatif(Graph &G, string gudang, string jalur){
     cout << "Tidak ada jalur alternatif tersedia." << endl;
     return "";
 }
-
+*/
 
 // masih bingung implementasinya kayak gimana
 void Pengiriman(TruckList &T, Graph &G, string gudang, string jalur, string truk, double bensin, double muatan, double jarak){

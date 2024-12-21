@@ -99,6 +99,7 @@ struct bensinElmt
 
 void CreateGraph(Graph &G);
 void CreatePomBensin(Graph_Pom_Bensin &GPB);
+void CreateTempList(TempList &L);
 Addr_TempList AlokasiTempList(Infotype_TempList x);
 Addr_Node AlokasiNode(Infotype_Node nameNode);
 Addr_Edge AlokasiEdge(Infotype_Edge infoEdge);
@@ -115,6 +116,7 @@ void Connecting(Graph &G, string node1, string node2, string jalan, double jarak
 void Connecting_Gudang_Bensin(Graph &G, string node1, string tempatBensin, string jalan, double jarak, int waktu);
 void Connecting_Bensin_Gudang(Graph &G, string tempatBensin, string node2, string jalan, double jarak, int waktu);
 Addr_Edge FindEdge(Graph &G, Addr_Node PNode, string data);
+string FindLastTempList(TempList L);
 void DeleteFirst_Bensin(Graph_Pom_Bensin &G, Addr_Bensin PBensin, Addr_Edge &P);
 void DeleteFirst_Edge(Graph &G, Addr_Node PNode, Addr_Edge &P);
 void DeleteLast_Edge(Graph &G, Addr_Node PNode, Addr_Edge &P);
@@ -124,9 +126,14 @@ void Disconnecting(Graph &G, string node1, string node2);
 void Disconnecting_Gudang_Bensin(Graph &G, string node1, string tempatBensin);
 void Disconnecting_Bensin_Gudang(Graph &G, string tempatBensin, string node2);
 void AlJikstra(Graph G, Infotype_Node Mulai, Infotype_Node selesai, TempList T);
+void catatTempList(const TempList &asal, TempList &tujuan);
+void asistenJalurAlternatifDFS(Graph &G, Infotype_Node &GudangSekarang, Infotype_Node &GudangTujuan, int WaktuSekarang, int &WaktuMinimal, TempList &L, TempList &jalanTerbaik, Infotype_Edge &namaJalanBlok);
+void jalurAlternatifDFS(Graph &G, Infotype_Node &awalGudang, Infotype_Node &tujuanGudang, Infotype_Edge &namaJalanBlok);
 Addr_Edge findShortestRute(Graph G, Addr_Node AG, TempList AT);
 bool telahDikunjungi(TempList AT, string Gudang);
 void ShowAllGudangJalur(Graph &G);
 void ShowAllPomBensin(Graph_Pom_Bensin &GPB);
-void showPeta(Graph &G, Graph_Pom_Bensin &GPB);
+//void showPeta(Graph &G, Graph_Pom_Bensin &GPB);
+void ShowTempList(TempList L);
+void Delete_Templist(TempList &L);
 #endif // RUTE_H_INCLUDED
