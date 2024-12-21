@@ -56,8 +56,9 @@ void deleteTruck(TruckList &T, string name);
 double biayaPengiriman(TruckList &T, string name, double biayaPerMuatan, double biayaPerKm, double jarak);
 double KapasitasMaksimal(TruckList &T, string name);
 void HanyaLewat(TruckList &T, string name);
-bool ApakahMacetatauHambatan(TruckList &T, string gudang, string jalur);
-void CatatJalur(TruckList &T, string gudang, string jalur, string truk);
-string JalurAlternatif(RoadList &R, string gudang, string jalur);
-void PilihRute(TruckList &T, RoadList &R, string gudang, string jalur, string truk, double bensin, double muatan, double jarak);
+double BensinperKapasitas(TruckList &T, string name, double bensin, int muatan, double jarak);
+bool ApakahMacetatauHambatan(Graph &G, string gudang, string jalur);
+void CatatJalur(Graph &G, string gudang, string jalur, string truk);
+// string JalurAlternatif(RoadList &R, string gudang, string jalur);
+void PilihRute(TruckList &T, Graph &G, string gudang, string jalur, string truk, double bensin, double muatan, double jarak);
 #endif // TRUK_H_INCLUDED

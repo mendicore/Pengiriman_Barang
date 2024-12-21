@@ -25,6 +25,7 @@ int main(int argc, char** argv) {
         cout << "11. Tampilkan semua gudang & jarak" << endl;
         cout << "12. Cari rute tercepat" << endl;
         cout << "13. Tampilkan pom bensin" << endl;
+        cout << "14. Mencari jalur alternatif " << endl;
         cout << "0. Keluar" << endl;
         cout << "Pilih pilihan: ";
         cin >> choice;
@@ -241,6 +242,21 @@ int main(int argc, char** argv) {
                 ShowAllPomBensin(GPB);
                 break;
             }
+
+            case 14:
+                {
+                    Infotype_Node gudang1, gudang2;
+                    Infotype_Edge jalan;
+                    cout << endl << "Masukkan nama Gudang pertama: ";
+                    cin.ignore();
+                    getline(cin, gudang1.nama);
+                    cout << endl << "Masukkan nama Gudang kedua: ";
+                    getline(cin, gudang2.nama);
+                    cout << endl << "Masukkan nama jalan: ";
+                    getline(cin, jalan.namaJalan);
+                    jalurAlternatifDFS(G, gudang1, gudang2, jalan);
+                    break;
+                }
 
             case 0: {
                 cout << endl << "Keluar dari program" << endl;
