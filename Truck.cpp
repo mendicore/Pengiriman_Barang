@@ -232,36 +232,6 @@ string JalurAlternatif(Graph &G, string gudang, string jalur){
 }
 */
 
-void CatatJalur(Graph &G, string gudang, string jalur, string truk){
-    Addr_Node node = FindNode(G, gudang);
-    if (node != NULL)
-    {
-        Addr_Edge newEdge = AlokasiEdge({jalur, 0, 0});
-        newEdge->NextEdge = FirstEdge(node);
-        FirstEdge(node) = newEdge;
-        cout << "Jalur dari " << gudang << " melalui " << jalur << " dengan truk " << truk << " telah dicatat." << endl;
-    }
-}
-
-string JalurAlternatif(Graph &G, string gudang, string jalur){
-    Addr_Node node = FindNode(G, gudang);
-
-    if (node != NULL){
-        for (Addr_Edge P = FirstEdge(node); P != NULL; P = NextEdge(P)){
-            if (P->Info.namaJalan == jalur){
-                for (Addr_Edge Q = FirstEdge(node); Q != NULL; Q = NextEdge(Q)){
-                    if (Q->Info.namaJalan != jalur){
-                        cout << "Jalur alternatif yang tersedia: " << Q->Info.namaJalan << endl;
-                        return Q->Info.namaJalan;
-                    }
-                }
-            }
-        }
-    }
-    cout << "Tidak ada jalur alternatif tersedia." << endl;
-    return "";
-}
-
 
 void PilihRute(TruckList &T, Graph &G, string gudang, string jalur, string truk, double bensin, double muatan, double jarak){
     if (ApakahMacetatauHambatan(G, gudang, jalur))
