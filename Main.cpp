@@ -1,54 +1,75 @@
-#include "Rute.h"
+#include "Truck.h"
 
 int main(int argc, char** argv) {
+    TruckList T;
     Graph G;
     Graph_Pom_Bensin GPB;
+
     CreateGraph(G);
     CreatePomBensin(GPB);
+    CreateTruck(T);
     int choice;
     string node1, node2, station, namaJalan;
     double distance;
     int waktu;
 
     do {
-        cout << "Menu Pilihan:" << endl;
-        cout << "1. Tambah Gudang" << endl;
-        cout << "2. Hapus Gudang" << endl;
-        cout << "3. Tambah Pom bensin" << endl;
-        cout << "4. Hapus Pom bensin" << endl;
-        cout << "5. Hubungkan Gudang" << endl;
-        cout << "6. Putuskan Gudang" << endl;
-        cout << "7. Hubungkan Gudang dengan Pom bensin" << endl;
-        cout << "8. Hubungkan Pom bensin dengan Gudang" << endl;
-        cout << "9. Putuskan Gudang dengan Pom bensin" << endl;
-        cout << "10. Putuskan Pom Bensin dengan Gudang" << endl;
-        cout << "11. Tampilkan semua gudang & jarak" << endl;
-        cout << "12. Cari rute tercepat" << endl;
-        cout << "13. Tampilkan pom bensin" << endl;
-        cout << "14. Mencari jalur alternatif " << endl;
-        cout << "0. Keluar" << endl;
+        cout << "<<===========================================" << endl;
+        cout << "           SISTEM PENGIRIMAN BARANG          " << endl;
+        cout << "===========================================>>" << endl;
+        cout << "1.  Tambah Gudang" << endl;
+        cout << "2.  Hapus Gudang" << endl;
+        cout << "---------------------------------------------" << endl;
+        cout << "3.  Tambah Pom bensin" << endl;
+        cout << "4.  Hapus Pom bensin" << endl;
+        cout << "---------------------------------------------" << endl;
+        cout << "5.  Tambah Truck" << endl;
+        cout << "6.  Hapus Truck" << endl;
+        cout << "---------------------------------------------" << endl;
+        cout << "7.  Hubungkan Gudang" << endl;
+        cout << "8.  Putuskan Gudang" << endl;
+        cout << "---------------------------------------------" << endl;
+        cout << "9.  Hubungkan Gudang dengan Pom bensin" << endl;
+        cout << "10. Hubungkan Pom bensin dengan Gudang" << endl;
+        cout << "11. Putuskan Gudang dengan Pom bensin" << endl;
+        cout << "12. Putuskan Pom Bensin dengan Gudang" << endl;
+        cout << "---------------------------------------------" << endl;
+        cout << "13. Tampilkan semua gudang & jarak" << endl;
+        cout << "14. Tampilkan semua pom bensin" << endl;
+        cout << "15. Tampilkan semua Truck" << endl;
+        cout << "---------------------------------------------" << endl;
+        cout << "16. Lakukan pengiriman." << endl;
+        cout << "0.  Keluar" << endl;
+        cout << "<===========================================>" << endl;
         cout << "Pilih pilihan: ";
         cin >> choice;
 
         switch (choice) {
             case 1: {
+                // Tambah Gudang
                 Infotype_Node namaGudang;
                 cout << endl << "Masukkan nama Gudang: ";
                 cin.ignore();
                 getline(cin, namaGudang.nama);
-                cout << endl << "Masukkan lokasi Gudang: ";
+                cout << "Masukkan lokasi Gudang: ";
                 getline(cin, namaGudang.lokasi);
-                cout << endl << "Masukkan kapasitas Gudang: ";
+                cout << "Masukkan kapasitas Gudang: ";
                 cin >> namaGudang.kapasitas;
-                cout << endl << "Masukkan jumlah Gudang: ";
+                cout << "Masukkan jumlah Barang di Gudang: ";
                 cin >> namaGudang.jumlah;
+                if(namaGudang.kapasitas <= namaGudang.jumlah){
+                    cout << "Jumlah barang tidak bisa melebihi kapasitas gudang!" << endl;
+                }
                 Addr_Node newNode = AlokasiNode(namaGudang);
                 AddNewNode(G, newNode);
-                cout << "Gudang " << namaGudang.nama << " berhasil ditambahkan!" << endl << endl;
+                cout << "---------------------------------------------" << endl;
+                cout << "Gudang " << namaGudang.nama << " berhasil ditambahkan!" << endl;
+                cout << "---------------------------------------------" << endl << endl;
                 break;
             }
 
             case 2: {
+                // Hapus Gudang
                 cout << endl << "Masukkan nama Gudang yang ingin dihapus: ";
                 cin.ignore();
                 getline(cin, node1);
@@ -63,6 +84,7 @@ int main(int argc, char** argv) {
             }
 
             case 3: {
+                // Tambah Pom Bensin
                 InfoType_Bensin namaPom;
                 cout << endl << "Masukkan nama Pom bensin: ";
                 cin.ignore();
@@ -80,7 +102,8 @@ int main(int argc, char** argv) {
             }
 
             case 4: {
-                cout << endl << "Masukkan nama Gudang yang ingin dihapus: ";
+                // Hapus Pom Bensin
+                cout << endl << "Masukkan nama Pom Bensin yang ingin dihapus: ";
                 cin.ignore();
                 getline(cin, station);
                 Addr_Bensin stationToDelete = FindBensin(GPB, station);
@@ -94,6 +117,32 @@ int main(int argc, char** argv) {
             }
 
             case 5: {
+                // Tambah Truck
+                infotype_Truck truck;
+                cout << endl << "Masukkan nama Truck: ";
+                cin.ignore();
+                getline(cin, truck.name);
+                cout << "Masukkan jumlah roda Truck: ";
+                cin >> truck.jumlahRoda;
+                cout << "Masukkan kapasitas barang: ";
+                cin >> truck.kapasitas;
+                cout << "Masukkan kapasitas bensin: ";
+                cin >> truck.bensin;
+
+                truck.muatan = 0;
+                addTruck(T, truck);
+
+                cout << "Truck " << truck.name << " berhasil ditambahkan!" << endl << endl;
+                break;
+            }
+
+            case 6: {
+                // Hapus Truck
+            }
+
+
+            case 7: {
+                // Sambungkan Kedua Gudang
                 cout << endl << "Masukkan nama Gudang pertama: ";
                 cin.ignore();
                 getline(cin, node1);
@@ -110,7 +159,8 @@ int main(int argc, char** argv) {
                 break;
             }
 
-            case 6: {
+            case 8: {
+                // Putuskan Kedua Gudang
                 cout << endl << "Masukkan nama Gudang pertama: ";
                 cin.ignore();
                 getline(cin, node1);
@@ -129,7 +179,8 @@ int main(int argc, char** argv) {
                 break;
             }
 
-            case 7: {
+            case 9: {
+                // Sambungkan Gudang dengan Pom Bensin
                 cout << endl << "Masukkan nama Gudang: ";
                 cin.ignore();
                 getline(cin, node1);
@@ -146,7 +197,8 @@ int main(int argc, char** argv) {
                 break;
             }
 
-            case 8: {
+            case 10: {
+                // Sambungkan Pom Bensin dengan Gudang
                 cout << endl << "Masukkan nama Pom bensin: ";
                 cin.ignore();
                 getline(cin, station);
@@ -163,7 +215,8 @@ int main(int argc, char** argv) {
                 break;
             }
 
-            case 9: {
+            case 11: {
+                // Putuskan Gudang dengan Pom Bensin
                 cout << endl << "Masukkan nama Gudang: ";
                 cin.ignore();
                 getline(cin, node1);
@@ -190,7 +243,8 @@ int main(int argc, char** argv) {
                 break;
             }
 
-            case 10: {
+            case 12: {
+                // Putuskan Pom Bensin dengan Gudang
                 cout << endl << "Masukkan nama Pom bensin: ";
                 cin.ignore();
                 getline(cin, station);
@@ -218,13 +272,18 @@ int main(int argc, char** argv) {
             }
 
 
-            case 11: {
+            case 13: {
+                // Menampilkan semua Gudang dan Jarak (nanti gabung gudang jalur, dan pom bensin menjadi 1 method Peta)
                 cout << endl << "Menampilkan Gudang dan Jarak:" << endl;
                 ShowAllGudangJalur(G);
                 break;
             }
 
-            case 12: {
+            case 14: {
+                cout << endl << "Semua Pom Bensin: " << endl;
+                ShowAllPomBensin(GPB);
+                break;
+                /*// Cari Rute Tercepat
                 TempList T;
                 Infotype_Node gudang1, gudang2;
                 cout << endl << "Masukkan nama Gudang pertama: ";
@@ -233,32 +292,87 @@ int main(int argc, char** argv) {
                 cout << "Masukkan nama Gudang kedua: ";
                 getline(cin, gudang2.nama);
                 AlJikstra(G, gudang1, gudang2, T);
+                break;*/
+            }
+
+            case 15:{
+                // Menampilkan semua Pom Bensin
+                cout << endl << "Daftar Truck: " << endl;
+                showTrucks(T);
                 break;
             }
 
-            case 13:
-            {
-                cout << endl << "Semua Pom Bensin: " << endl;
-                ShowAllPomBensin(GPB);
-                break;
-            }
+            case 16: {
+                // Lakukan pengiriman
+                infotype_Truck truck;
+                string gudangA, gudangB;
+                double barang;
 
-            case 14:
-                {
-                    Infotype_Node gudang1, gudang2;
-                    Infotype_Edge jalan;
-                    cout << endl << "Masukkan nama Gudang pertama: ";
-                    cin.ignore();
-                    getline(cin, gudang1.nama);
-                    cout << endl << "Masukkan nama Gudang kedua: ";
-                    getline(cin, gudang2.nama);
-                    cout << endl << "Masukkan nama jalan: ";
-                    getline(cin, jalan.namaJalan);
-                    jalurAlternatifDFS(G, gudang1, gudang2, jalan);
-                    break;
+                cout << "Masukkan nama truk yang akan digunakan: ";
+                getline(cin, truck.name);
+
+                adr_Truck foundTruck = findTruck(T, truck); // Mencari truk berdasarkan nama
+                if (foundTruck != NULL) {
+                    cout << "Truk " << foundTruck->info.name << " ditemukan." << endl << endl;
+
+                    // Memilih gudang pengirim
+                    cout << "Masukkan nama gudang pengirim: ";
+                    getline(cin, gudangA);
+                    Addr_Node foundNode1 = FindNode(G, gudangA); // Mencari node gudang pengirim
+                    if (foundNode1 != NULL) {
+                        // Memilih gudang penerima
+                        cout << "Masukkan nama gudang penerima: ";
+                        getline(cin, gudangB);
+                        Addr_Node foundNode2 = FindNode(G, gudangB); // Mencari node gudang penerima
+                        if (foundNode2 != NULL) {
+                            // Menampilkan informasi gudang pengirim
+                            Infotype_Node pengirim = foundNode1->info;
+                            cout << "\nInformasi Gudang pengirim " << pengirim.nama << endl;
+                            cout << "Lokasi                     : " << pengirim.lokasi << endl;
+                            cout << "Kapasitas Gudang           : " << pengirim.kapasitas << endl;
+                            cout << "Jumlah Barang di Gudang    : " << pengirim.jumlah << endl << endl;
+
+                            // Menampilkan informasi gudang penerima
+                            Infotype_Node penerima = foundNode2->info;
+                            cout << "\nInformasi Gudang penerima " << penerima.nama << endl;
+                            cout << "Lokasi                     : " << penerima.lokasi << endl;
+                            cout << "Kapasitas Gudang           : " << penerima.kapasitas << endl;
+                            cout << "Jumlah Barang di Gudang    : " << penerima.jumlah << endl << endl;
+
+                            // Meminta jumlah barang yang akan diantar
+                            cout << "Masukkan jumlah barang yang ingin diantar: ";
+                            cin >> barang;
+
+                            // Mengecek apakah kapasitas truk cukup
+                            if (foundTruck->info.kapasitas < barang) {
+                                cout << "Jumlah barang melebihi kapasitas truk!" << endl;
+                            }
+
+                            foundTruck->info.kapasitas -= barang;
+                            cout << "Barang berhasil diangkut. apasitas truk: " << foundTruck->info.kapasitas << endl;
+                            cout << "Memulai pengiriman.....";
+
+                            //implementasi procedure pengiriman
+
+                            foundTruck->info.kapasitas -= barang;
+                            cout << "Barang berhasil diantar. Sisa kapasitas truk: " << foundTruck->info.kapasitas << endl;
+
+
+                        } else {
+                            cout << "Gudang penerima tidak ditemukan!" << endl;
+                        }
+                    } else {
+                        cout << "Gudang pengirim tidak ditemukan!" << endl;
+                    }
+                } else {
+                    cout << "Truk tidak ditemukan!" << endl;
                 }
+                break;
+            }
+
 
             case 0: {
+                // Keluar Program
                 cout << endl << "Keluar dari program" << endl;
                 break;
             }
