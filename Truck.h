@@ -9,7 +9,6 @@ using namespace std;
 #define first(L) (L).first
 #define next(P) (P)->next
 #define info(P) (P)->info
-
 typedef struct t_elm_Truck* adr_Truck;
 
 typedef struct {
@@ -20,8 +19,10 @@ typedef struct {
     int muatan;
 } Truck;
 
+typedef Truck infotype_Truck;
+
 typedef struct t_elm_Truck {
-    Truck info;
+    infotype_Truck info;
     adr_Truck next;
 } elm_Truck;
 
@@ -35,14 +36,14 @@ void addTruck(TruckList &T, Truck x);
 void AddMuatan(TruckList &T, string name, int muatan);
 void deleteMuatan(TruckList &T, string name, int muatan);
 void deleteTruck(TruckList &T, string name);
-void showAllTruck(TruckList &T);
+adr_Truck findTruck(TruckList &T, infotype_Truck x);
+void showTrucks(TruckList &T);
 double biayaPengiriman(TruckList &T, string name, double biayaPerMuatan, double biayaPerKm, double jarak);
 double KapasitasMaksimal(TruckList &T, string name);
 void HanyaLewat(TruckList &T, string name);
-double BensinperKapasitas(TruckList &T, string name, double bensin, int muatan, double jarak)
 bool ApakahMacetatauHambatan(Graph &G, string gudang, string jalur);
 void CatatJalur(Graph &G, string gudang, string jalur, string truk);
-// string JalurAlternatif(Graph &G, string gudang, string jalur);
-void PilihRute(TruckList &T, Graph &G, string gudang, string jalur, string truk, double bensin, double muatan, double jarak);
+string JalurAlternatif(Graph &G, string gudang, string jalur);
+void Pengiriman(TruckList &T, Graph &G, string gudang, string jalur, string truk);
 
 #endif // TRUCK_H_INCLUDED
