@@ -174,7 +174,7 @@ void HanyaLewat(TruckList &T, string name){
     cout << "Truck " << name << " hanya lewat, tidak ada muatan yang ditambah atau dikurangi." << endl;
 }
 
-bool ApakahMacetatauHambatan(Graph &G, Infotype_Node gudang, Infotype_Edge jalur){
+bool ApakahMacetatauHambatan(Graph &G, const Infotype_Node &gudang, const Infotype_Edge &jalur){
     Addr_Node node = FindNode(G, gudang.nama);
     if (node != NULL)
     {
@@ -198,7 +198,7 @@ bool ApakahMacetatauHambatan(Graph &G, Infotype_Node gudang, Infotype_Edge jalur
     return false;
 }
 
-void CatatJalur(Graph &G, Infotype_Node gudangA, Infotype_Node GudangB, Infotype_Edge jalur, infotype_Truck truk){
+void CatatJalur(Graph &G, const Infotype_Node &gudangA, const Infotype_Node &GudangB, const Infotype_Edge &jalur, const infotype_Truck &truk){
     Addr_Node nodeA = FindNode(G, gudangA.nama);
     Addr_Node nodeB = FindNode(G, GudangB.nama);
     if (nodeA != Null && nodeB != Null)
@@ -236,7 +236,7 @@ string JalurAlternatif(Graph &G, string gudang, string jalur){
 }
 */
 
-void Pengiriman(TruckList &T, Graph &G, Infotype_Node gudangA, Infotype_Node gudangB, Infotype_Edge jalur, infotype_Truck truk, double bensin, double muatan, double jarak){
+void Pengiriman(TruckList &T, Graph &G, const Infotype_Node &gudangA, const Infotype_Node &gudangB, const Infotype_Edge &jalur, const infotype_Truck &truk, double bensin, double muatan, double jarak){
     if (ApakahMacetatauHambatan(G, gudangA, jalur) || ApakahMacetatauHambatan(G, gudangB, jalur))
     {
         TempList jalurAlternatif;

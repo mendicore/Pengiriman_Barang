@@ -403,7 +403,7 @@ void catatTempList(const TempList &asal, TempList &tujuan)
     }
 }
 
-void asistenJalurAlternatifDFS(Graph &G, Infotype_Node &GudangSekarang, Infotype_Node &GudangTujuan, int WaktuSekarang, int &WaktuMinimal, TempList &L, TempList &jalanTerbaik, Infotype_Edge &namaJalanBlok)
+void asistenJalurAlternatifDFS(Graph &G, const Infotype_Node &GudangSekarang, const Infotype_Node &GudangTujuan, int WaktuSekarang, int &WaktuMinimal, TempList &L, TempList &jalanTerbaik, const Infotype_Edge &namaJalanBlok)
 {
     if(GudangSekarang.nama == GudangTujuan.nama)
     {
@@ -437,7 +437,7 @@ void asistenJalurAlternatifDFS(Graph &G, Infotype_Node &GudangSekarang, Infotype
     }
 }
 
-void jalurAlternatifDFS(Graph &G, Infotype_Node &awalGudang, Infotype_Node &tujuanGudang, Infotype_Edge &namaJalanBlok)
+void jalurAlternatifDFS(Graph &G, const Infotype_Node &awalGudang, const Infotype_Node &tujuanGudang, const Infotype_Edge &namaJalanBlok)
 {
     TempList dikunjungi;
     CreateTempList(dikunjungi);

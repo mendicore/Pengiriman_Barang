@@ -31,8 +31,8 @@ typedef struct {
 } TruckList;
 
 void CreateTruck(TruckList &T);
-adr_Truck Alokasi(Truck x);
-void addTruck(TruckList &T, Truck x);
+adr_Truck Alokasi(infotype_Truck x);
+void addTruck(TruckList &T, infotype_Truck x);
 void AddMuatan(TruckList &T, string name, int muatan);
 void deleteMuatan(TruckList &T, string name, int muatan);
 void deleteTruck(TruckList &T, string name);
@@ -41,9 +41,10 @@ void showTrucks(TruckList &T);
 double biayaPengiriman(TruckList &T, string name, double biayaPerMuatan, double biayaPerKm, double jarak);
 double KapasitasMaksimal(TruckList &T, string name);
 double BensinperKapasitas(TruckList &T, string name, double bensin, double muatan, double jarak);
+void isiBensin(TruckList &T, Graph &G, string name, infotype_Truck truk, double bensin, double muatan, double jarak);
 void HanyaLewat(TruckList &T, string name);
-bool ApakahMacetatauHambatan(Graph &G, Infotype_Node gudang, Infotype_Edge jalur);
-void CatatJalur(Graph &G, Infotype_Node gudangA, Infotype_Node gudangB, Infotype_Edge jalur, infotype_Truck truk);
+bool ApakahMacetatauHambatan(Graph &G, const Infotype_Node &gudang, const Infotype_Edge &jalur);
+void CatatJalur(Graph &G, const Infotype_Node &gudangA, const Infotype_Node &GudangB, const Infotype_Edge &jalur, const infotype_Truck &truk);
 //string JalurAlternatif(Graph &G, string gudang, string jalur);
-void Pengiriman(TruckList &T, Graph &G, Infotype_Node gudangA, Infotype_Node gudangB, Infotype_Edge jalur, infotype_Truck truk, double bensin, double muatan, double jarak);
+void Pengiriman(TruckList &T, Graph &G, const Infotype_Node &gudangA, const Infotype_Node &gudangB, const Infotype_Edge &jalur, const infotype_Truck &truk, double bensin, double muatan, double jarak);
 #endif // TRUCK_H_INCLUDED
