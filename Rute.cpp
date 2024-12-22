@@ -245,14 +245,12 @@ Addr_Edge FindEdge(Graph &G, Addr_Node PNode, string data) {
     return NULL;
 }
 
-string FindLastTempList(TempList L)
-{
+string FindLastTempList(const TempList &L) {
     Addr_TempList P = L.pertama;
-    while(P->nextTempList != nullptr)
-    {
+    while (P != nullptr && P->nextTempList != nullptr) {
         P = P->nextTempList;
     }
-    return P->info;
+    return P ? P->info : ""; // Added null check to avoid dereferencing nullptr
 }
 
 void DeleteFirst_Bensin(Graph_Pom_Bensin &G, Addr_Bensin PBensin, Addr_Edge &P){
