@@ -252,7 +252,7 @@ string FindLastTempList(TempList L)
     {
         P = P->nextTempList;
     }
-    return P->Info;
+    return P->info;
 }
 
 void DeleteFirst_Bensin(Graph_Pom_Bensin &G, Addr_Bensin PBensin, Addr_Edge &P){
@@ -401,7 +401,7 @@ void catatTempList(const TempList &asal, TempList &tujuan)
 
     for(Addr_TempList P = asal.pertama; P != nullptr; P = P->nextTempList)
     {
-        InsertLast_TempList(tujuan, AlokasiTempList(P->Info));
+        InsertLast_TempList(tujuan, AlokasiTempList(P->info));
     }
 }
 
@@ -425,14 +425,14 @@ void asistenJalurAlternatifDFS(Graph &G, Infotype_Node &GudangSekarang, Infotype
 
     for(Addr_Edge Gjalan = P->FirstEdge; Gjalan != nullptr; Gjalan = Gjalan->NextEdge)
     {
-        bool terblokir = (Gjalan->Info.namaJalan == namaJalanBlok.namaJalan);
-        bool dilewati = (telahDikunjungi(L, Gjalan->Info.bangunan.nama));
+        bool terblokir = (Gjalan->info.namaJalan == namaJalanBlok.namaJalan);
+        bool dilewati = (telahDikunjungi(L, Gjalan->info.bangunan.nama));
 
         if(!terblokir && !dilewati)
         {
-            InsertLast_TempList(L, AlokasiTempList(Gjalan->Info.bangunan.nama));
-            cout << "Menuju jalan " << Gjalan->Info.namaJalan << " menuju gudang " << Gjalan->Info.bangunan.nama << " memakan waktu " << Gjalan->Info.waktu << endl;
-            asistenJalurAlternatifDFS(G, Gjalan->Info.bangunan, GudangTujuan, WaktuSekarang + Gjalan->Info.waktu, WaktuMinimal, L, jalanTerbaik, namaJalanBlok);
+            InsertLast_TempList(L, AlokasiTempList(Gjalan->info.bangunan.nama));
+            cout << "Menuju jalan " << Gjalan->info.namaJalan << " menuju gudang " << Gjalan->info.bangunan.nama << " memakan waktu " << Gjalan->info.waktu << endl;
+            asistenJalurAlternatifDFS(G, Gjalan->info.bangunan, GudangTujuan, WaktuSekarang + Gjalan->info.waktu, WaktuMinimal, L, jalanTerbaik, namaJalanBlok);
             Delete_Templist(L);
             cout << "Kembali ke kota " << FindLastTempList(L) << endl;
         }
@@ -470,7 +470,7 @@ void jalurAlternatifDFS(Graph &G, Infotype_Node &awalGudang, Infotype_Node &tuju
             {
                 cout << " -> ";
             }
-            cout << P->Info;
+            cout << P->info;
             cetakPertama = false;
         }
         cout << endl;
@@ -543,6 +543,14 @@ void ShowAllPomBensin(Graph_Pom_Bensin &GPB)
             cout << "Lokasi pom bensin: " << info(B).lokasi << endl;
             cout << "Kapasitas tangki pom bensin: " << info(B).kapasitas << endl;
             cout << "Jumlah dispenser bensin : " << info(B).jumlah << endl;
+            for (Addr_Node gudang = B->keGudang; gudang != Null; gudang = NextNode(gudang))
+            {
+                cout << "Gudang yang terhubung: " << info(gudang).nama << endl;
+                for (Addr_Edge jalur = FirstEdge(gudang); jalur != Null; jalur = NextEdge(jalur))
+                {
+                    cout << "  - Jalan: " << info(jalur).namaJalan << ", Jarak: " << info(jalur).jarak << " km, Waktu: " << info(jalur).waktu << " detik" << endl;
+                }
+            }
         }
     }
     else
@@ -551,11 +559,36 @@ void ShowAllPomBensin(Graph_Pom_Bensin &GPB)
 	}
 }
 
+void showPeta(Graph &G, Graph_Pom_Bensin &GPB) {
+    // Display nodes
+    cout << "Gudang dalam graf:" << endl;
+    for (Addr_Node node = Start(G); node != Null; node = NextNode(node)) {
+        cout << "Nama gudang: " << info(node).nama << endl
+         << "Lokasi gudang: "<< info(node).lokasi << endl
+         << "Kapasitas gudang: " << info(node).kapasitas << endl
+         << "Jumlah gudang: " << info(node).jumlah << endl <<
+         "Tinggi gudang: " << info(node).tinggi << endl;
+    }
+
+    // Display edges
+    cout << "Jalur dalam graf:" << endl;
+    for (Addr_Node node = Start(G); node != Null; node = NextNode(node))
+    {
+        for (Addr_Edge jalur = FirstEdge(node); jalur != Null; jalur = NextEdge(jalur))
+        {
+            cout << "  - Jalan: " << info(jalur).namaJalan << ", Jarak: " << info(jalur).jarak << " km, Waktu: " << info(jalur).waktu << " detik" << endl;
+        }
+    }
+
+    // Display gas stations
+    ShowAllPomBensin(GPB);
+}
+
 void ShowTempList(TempList L)
 {
     for(Addr_TempList P = L.pertama; P != nullptr; P = P->nextTempList)
     {
-        cout << P->Info << " ";
+        cout << P->info << " ";
     }
     cout << endl;
 }

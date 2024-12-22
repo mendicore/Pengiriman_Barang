@@ -1,6 +1,7 @@
 #include "Truck.h"
 
-int main(int argc, char** argv) {
+int main(int argc, char** argv)
+{
     TruckList T;
     Graph G;
     Graph_Pom_Bensin GPB;
@@ -283,7 +284,7 @@ int main(int argc, char** argv) {
                 cout << endl << "Semua Pom Bensin: " << endl;
                 ShowAllPomBensin(GPB);
                 break;
-                /*// Cari Rute Tercepat
+                /* Cari Rute Tercepat
                 TempList T;
                 Infotype_Node gudang1, gudang2;
                 cout << endl << "Masukkan nama Gudang pertama: ";
@@ -305,7 +306,8 @@ int main(int argc, char** argv) {
             case 16: {
                 // Lakukan pengiriman
                 infotype_Truck truck;
-                string gudangA, gudangB;
+                Infotype_Node GudangA, GudangB;
+                Infotype_Edge jalur;
                 double barang;
 
                 cout << "Masukkan nama truk yang akan digunakan: ";
@@ -317,24 +319,24 @@ int main(int argc, char** argv) {
 
                     // Memilih gudang pengirim
                     cout << "Masukkan nama gudang pengirim: ";
-                    getline(cin, gudangA);
-                    Addr_Node foundNode1 = FindNode(G, gudangA); // Mencari node gudang pengirim
+                    getline(cin, GudangA.nama);
+                    Addr_Node foundNode1 = FindNode(G, GudangA.nama); // Mencari node gudang pengirim
                     if (foundNode1 != NULL) {
                         // Memilih gudang penerima
                         cout << "Masukkan nama gudang penerima: ";
-                        getline(cin, gudangB);
-                        Addr_Node foundNode2 = FindNode(G, gudangB); // Mencari node gudang penerima
+                        getline(cin, GudangB.nama);
+                        Addr_Node foundNode2 = FindNode(G, GudangB.nama); // Mencari node gudang penerima
                         if (foundNode2 != NULL) {
                             // Menampilkan informasi gudang pengirim
                             Infotype_Node pengirim = foundNode1->info;
-                            cout << "\nInformasi Gudang pengirim " << pengirim.nama << endl;
+                            cout << endl << "Informasi Gudang pengirim " << pengirim.nama << endl;
                             cout << "Lokasi                     : " << pengirim.lokasi << endl;
                             cout << "Kapasitas Gudang           : " << pengirim.kapasitas << endl;
                             cout << "Jumlah Barang di Gudang    : " << pengirim.jumlah << endl << endl;
 
                             // Menampilkan informasi gudang penerima
                             Infotype_Node penerima = foundNode2->info;
-                            cout << "\nInformasi Gudang penerima " << penerima.nama << endl;
+                            cout << endl << "Informasi Gudang penerima " << penerima.nama << endl;
                             cout << "Lokasi                     : " << penerima.lokasi << endl;
                             cout << "Kapasitas Gudang           : " << penerima.kapasitas << endl;
                             cout << "Jumlah Barang di Gudang    : " << penerima.jumlah << endl << endl;
@@ -352,7 +354,7 @@ int main(int argc, char** argv) {
                             cout << "Barang berhasil diangkut. apasitas truk: " << foundTruck->info.kapasitas << endl;
                             cout << "Memulai pengiriman.....";
 
-                            //implementasi procedure pengiriman
+                            Pengiriman(T, G, pengirim, penerima, jalur, truck, 2000.00, 10.00, 50.00);
 
                             foundTruck->info.kapasitas -= barang;
                             cout << "Barang berhasil diantar. Sisa kapasitas truk: " << foundTruck->info.kapasitas << endl;

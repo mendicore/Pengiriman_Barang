@@ -24,6 +24,7 @@ typedef Elmt_Node* Addr_Node;
 typedef Elmt_Edge* Addr_Edge;
 typedef Elmt_TempList* Addr_TempList;
 typedef Elmt_Bensin* Addr_Bensin;
+
 typedef struct{
    string nama;
    string lokasi;
@@ -92,6 +93,7 @@ struct eElmt {
 
 struct bensinElmt
 {
+    Addr_Node keGudang;
     InfoType_Bensin info;
     Addr_Bensin nextBensinList;
     Addr_Edge FirstBensin;
@@ -133,7 +135,7 @@ Addr_Edge findShortestRute(Graph G, Addr_Node AG, TempList AT);
 bool telahDikunjungi(TempList AT, string Gudang);
 void ShowAllGudangJalur(Graph &G);
 void ShowAllPomBensin(Graph_Pom_Bensin &GPB);
-//void showPeta(Graph &G, Graph_Pom_Bensin &GPB);
+void showPeta(Graph &G, Graph_Pom_Bensin &GPB);
 void ShowTempList(TempList L);
 void Delete_Templist(TempList &L);
 #endif // RUTE_H_INCLUDED

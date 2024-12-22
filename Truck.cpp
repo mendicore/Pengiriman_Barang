@@ -136,7 +136,7 @@ double KapasitasMaksimal(TruckList &T, string name){
     return 0.0;
 }
 
-double BensinperKapasitas(TruckList &T, string name, double bensin, int muatan, double jarak){
+double BensinperKapasitas(TruckList &T, string name, double bensin, double muatan, double jarak){
     for (adr_Truck P = first(T); P != NULL; P = next(P))
     {
         if (info(P).name == name)
@@ -149,17 +149,38 @@ double BensinperKapasitas(TruckList &T, string name, double bensin, int muatan, 
     return 0.0;
 }
 
+void isiBensin(TruckList &T, Graph &G, string name, infotype_Truck truk, double bensin, double muatan, double jarak) {
+    Graph_Pom_Bensin A;
+    CreatePomBensin(A);
+    Addr_Bensin P = FindBensin(A, name);
+
+    double maksBensin = KapasitasMaksimal(T, truk.name);
+
+    for (adr_Truck R = T.first; R != nullptr; R = R->next) {
+        if (R->info.name == truk.name && P->info.nama == name) {
+            if (bensin < maksBensin) {
+                double neededBensin = maksBensin - bensin;
+                bensin += neededBensin;
+                cout << "Truk " << name << " telah diisi " << neededBensin << " liter gas." << endl;
+                return;
+            }
+            break;
+        }
+    }
+    cout << "Truck dengan nama " << name << " tidak ditemukan!" << endl;
+}
+
 void HanyaLewat(TruckList &T, string name){
     cout << "Truck " << name << " hanya lewat, tidak ada muatan yang ditambah atau dikurangi." << endl;
 }
 
-bool ApakahMacetatauHambatan(Graph &G, string gudang, string jalur){
-    Addr_Node node = FindNode(G, gudang);
+bool ApakahMacetatauHambatan(Graph &G, Infotype_Node gudang, Infotype_Edge jalur){
+    Addr_Node node = FindNode(G, gudang.nama);
     if (node != NULL)
     {
         for (Addr_Edge P = FirstEdge(node); P != NULL; P = NextEdge(P))
         {
-            if (P->info.namaJalan == jalur)
+            if (P->info.namaJalan == jalur.namaJalan)
             {
                 int count = 0;
                 for (Addr_Node Q = Start(G); Q != NULL; Q = NextNode(Q))
@@ -168,7 +189,7 @@ bool ApakahMacetatauHambatan(Graph &G, string gudang, string jalur){
                 }
                 if (count > 1)
                 {
-                    cout << "Jalur " << jalur << " macet karena ada lebih dari 1 truk." << endl;
+                    cout << "Jalur " << jalur.namaJalan << " macet karena ada lebih dari 1 truk." << endl;
                     return true;
                 }
             }
@@ -177,14 +198,15 @@ bool ApakahMacetatauHambatan(Graph &G, string gudang, string jalur){
     return false;
 }
 
-void CatatJalur(Graph &G, string gudang, string jalur, string truk){
-    Addr_Node node = FindNode(G, gudang);
-    if (node != NULL)
+void CatatJalur(Graph &G, Infotype_Node gudangA, Infotype_Node GudangB, Infotype_Edge jalur, infotype_Truck truk){
+    Addr_Node nodeA = FindNode(G, gudangA.nama);
+    Addr_Node nodeB = FindNode(G, GudangB.nama);
+    if (nodeA != Null && nodeB != Null)
     {
-        Addr_Edge newEdge = AlokasiEdge({jalur, 0, 0});
-        newEdge->NextEdge = FirstEdge(node);
-        FirstEdge(node) = newEdge;
-        cout << "Jalur dari " << gudang << " melalui " << jalur << " dengan truk " << truk << " telah dicatat." << endl;
+        Addr_Edge newEdge1 = AlokasiEdge({jalur.namaJalan, 0, 0});
+        NextEdge(newEdge1) = FirstEdge(nodeA);
+        FirstEdge(nodeA) = newEdge1;
+        cout << "Jalur dari " << gudangA.nama << " melalui " << jalur.namaJalan << " ke " << GudangB.nama << " dengan truk " << truk.name << " telah dicatat." << endl;
     }
 }
 
@@ -214,13 +236,22 @@ string JalurAlternatif(Graph &G, string gudang, string jalur){
 }
 */
 
-// masih bingung implementasinya kayak gimana
-void Pengiriman(TruckList &T, Graph &G, string gudang, string jalur, string truk, double bensin, double muatan, double jarak){
-    if (ApakahMacetatauHambatan(G, gudang, jalur))
+void Pengiriman(TruckList &T, Graph &G, Infotype_Node gudangA, Infotype_Node gudangB, Infotype_Edge jalur, infotype_Truck truk, double bensin, double muatan, double jarak){
+    if (ApakahMacetatauHambatan(G, gudangA, jalur) || ApakahMacetatauHambatan(G, gudangB, jalur))
     {
-        jalur = JalurAlternatif(G, gudang, jalur);
+        TempList jalurAlternatif;
+        CreateTempList(jalurAlternatif);
+        jalurAlternatifDFS(G, gudangA, gudangB, jalur);
+        AlJikstra(G, gudangA, gudangB, jalurAlternatif);
     }
-    double bensinDiperlukan = (muatan / 1000.0) * bensin * jarak;
-    CatatJalur(G, gudang, jalur, truk);
-    cout << "Rute yang dipilih: " << jalur << " dengan bensin yang diperlukan: " << bensinDiperlukan << " liter." << endl;
+    double bensinDiperlukan = BensinperKapasitas(T, truk.name, bensin, muatan, jarak);
+    if(BensinperKapasitas(T, truk.name, bensin, muatan, jarak) < bensinDiperlukan)
+    {
+        InfoType_Bensin R;
+        cout << "Masukkan lokasi pom bensin: ";
+        getline(cin, R.lokasi);
+        isiBensin(T, G, R.lokasi, truk, bensin, muatan, jarak);
+    }
+    CatatJalur(G, gudangA, gudangB, jalur, truk);
+    cout << "Rute yang dipilih: " << jalur.namaJalan << " dengan bensin yang diperlukan: " << bensinDiperlukan << " liter." << endl;
 }

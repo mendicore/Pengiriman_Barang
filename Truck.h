@@ -40,9 +40,10 @@ adr_Truck findTruck(TruckList &T, infotype_Truck x);
 void showTrucks(TruckList &T);
 double biayaPengiriman(TruckList &T, string name, double biayaPerMuatan, double biayaPerKm, double jarak);
 double KapasitasMaksimal(TruckList &T, string name);
+double BensinperKapasitas(TruckList &T, string name, double bensin, double muatan, double jarak);
 void HanyaLewat(TruckList &T, string name);
-bool ApakahMacetatauHambatan(Graph &G, string gudang, string jalur);
-void CatatJalur(Graph &G, string gudang, string jalur, string truk);
+bool ApakahMacetatauHambatan(Graph &G, Infotype_Node gudang, Infotype_Edge jalur);
+void CatatJalur(Graph &G, Infotype_Node gudangA, Infotype_Node gudangB, Infotype_Edge jalur, infotype_Truck truk);
 //string JalurAlternatif(Graph &G, string gudang, string jalur);
-void Pengiriman(TruckList &T, Graph &G, string gudang, string jalur, string truk, double bensin, double muatan, double jarak);
+void Pengiriman(TruckList &T, Graph &G, Infotype_Node gudangA, Infotype_Node gudangB, Infotype_Edge jalur, infotype_Truck truk, double bensin, double muatan, double jarak);
 #endif // TRUCK_H_INCLUDED
