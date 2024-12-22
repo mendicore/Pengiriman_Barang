@@ -375,7 +375,7 @@ void Disconnecting_Bensin_Gudang(Graph &G, string tempatBensin, string node2)
 }
 
 // Sekalian kalau butuh
-void AlJikstra(Graph G, Infotype_Node Mulai, Infotype_Node selesai, TempList T)
+void AlJikstra(Graph G, const Infotype_Node &Mulai, const Infotype_Node &selesai, TempList T)
 {
     if(Mulai.nama == selesai.nama)
     {

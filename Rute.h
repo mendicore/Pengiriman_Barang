@@ -127,7 +127,7 @@ void Delete_Edge(Graph &G, Addr_Node PNode, Addr_Edge PEdge);
 void Disconnecting(Graph &G, string node1, string node2);
 void Disconnecting_Gudang_Bensin(Graph &G, string node1, string tempatBensin);
 void Disconnecting_Bensin_Gudang(Graph &G, string tempatBensin, string node2);
-void AlJikstra(Graph G, Infotype_Node Mulai, Infotype_Node selesai, TempList T);
+void AlJikstra(Graph G, const Infotype_Node &Mulai, const Infotype_Node &selesai, TempList T);
 void catatTempList(const TempList &asal, TempList &tujuan);
 void asistenJalurAlternatifDFS(Graph &G, const Infotype_Node &GudangSekarang, const Infotype_Node &GudangTujuan, int WaktuSekarang, int &WaktuMinimal, TempList &L, TempList &jalanTerbaik, const Infotype_Edge &namaJalanBlok);
 void jalurAlternatifDFS(Graph &G, const Infotype_Node &awalGudang, const Infotype_Node &tujuanGudang, const Infotype_Edge &namaJalanBlok);
