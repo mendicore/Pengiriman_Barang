@@ -118,7 +118,7 @@ void Connecting(Graph &G, string node1, string node2, string jalan, double jarak
 void Connecting_Gudang_Bensin(Graph &G, string node1, string tempatBensin, string jalan, double jarak, int waktu);
 void Connecting_Bensin_Gudang(Graph &G, string tempatBensin, string node2, string jalan, double jarak, int waktu);
 Addr_Edge FindEdge(Graph &G, Addr_Node PNode, string data);
-string FindLastTempList(TempList L);
+string FindLastTempList(const TempList &L);
 void DeleteFirst_Bensin(Graph_Pom_Bensin &G, Addr_Bensin PBensin, Addr_Edge &P);
 void DeleteFirst_Edge(Graph &G, Addr_Node PNode, Addr_Edge &P);
 void DeleteLast_Edge(Graph &G, Addr_Node PNode, Addr_Edge &P);

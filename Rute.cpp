@@ -250,7 +250,7 @@ string FindLastTempList(const TempList &L) {
     while (P != nullptr && P->nextTempList != nullptr) {
         P = P->nextTempList;
     }
-    return P ? P->info : ""; // Added null check to avoid dereferencing nullptr
+    return (P ? P->info : ""); // Added null check to avoid dereferencing nullptr
 }
 
 void DeleteFirst_Bensin(Graph_Pom_Bensin &G, Addr_Bensin PBensin, Addr_Edge &P){
