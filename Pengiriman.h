@@ -1,5 +1,5 @@
-#ifndef RUTE_H_INCLUDED
-#define RUTE_H_INCLUDED
+#ifndef PENGIRIMAN_H_INCLUDED
+#define PENGIRIMAN_H_INCLUDED
 
 #include <iostream>
 #include <string>
@@ -133,4 +133,4 @@ void Catat_Jalan(Graph &G);
 void Show_Graph(Graph &G);
 void Show_Trucks(TruckList &T);
 
-#endif // RUTE_H_INCLUDED
+#endif // PENGIRIMAN_H_INCLUDED
