@@ -112,6 +112,7 @@ Addr_Truck             Find_Truck(TruckList &T, string nama);
 void Add_Vertex_Gudang(Graph &G, Addr_Vertex_Gudang P);
 void Add_Vertex_PomBensin(Graph &G, Addr_Vertex_PomBensin P);
 void Add_Truck(TruckList &T, Addr_Truck P);
+void InsertLast_Edge(Graph &G, Addr_Vertex_Gudang PNode, Addr_Edge PEdge);
 
 void Delete_Vertex_Gudang(Graph &G, Addr_Vertex_Gudang P);
 void Delete_Vertex_PomBensin(Graph &G, Addr_Vertex_PomBensin P);
@@ -128,9 +129,8 @@ void Disconnecting_Gudang_PomBensin(Graph &G, string pomBensin, string gudang);
 Addr_Vertex_PomBensin Cari_PomBensin_Terdekat(Graph &G, Addr_Vertex_Gudang gudang);
 void Rute_Tercepat(Graph &G, Addr_Truck truk, Addr_Vertex_Gudang pengirim, Addr_Vertex_Gudang penerima, int jumBarang);
 Addr_Edge Rute_Alternatif(Graph &G, Addr_Vertex_Gudang pengirim, Addr_Vertex_Gudang penerima);
-void Catat_Jalan(Graph &G);
+void Catat_Jalan(Graph &G, Infotype_Gudang &gudangA, Infotype_Gudang &GudangB, Infotype_Edge &jalur, Infotype_Truck &truk);
 
 void Show_Graph(Graph &G);
 void Show_Trucks(TruckList &T);
-
 #endif // PENGIRIMAN_H_INCLUDED

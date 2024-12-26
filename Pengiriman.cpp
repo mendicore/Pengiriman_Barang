@@ -138,6 +138,18 @@ void Add_Truck(TruckList &T, Addr_Truck P) {
     }
 }
 
+void InsertLast_Edge(Graph &G, Addr_Vertex_Gudang node, Addr_Edge newEdge) {
+    if (node->FirstEdge == NULL) {
+        node->FirstEdge = newEdge;
+    } else {
+        Addr_Edge temp = node->FirstEdge;
+        while (temp->NextEdge != NULL) {
+            temp = temp->NextEdge;
+        }
+        temp->NextEdge = newEdge;
+    }
+}
+
 // delete
 void Delete_Vertex_Gudang(Graph &G, Addr_Vertex_Gudang P) {
    if (StartGudang(G) == NULL) {
@@ -215,28 +227,37 @@ void Connecting_Gudang(Graph &G, string gudang1, string gudang2, string jalan, d
         return;
     }
 
-    Infotype_Edge edge;
-    edge.gudang = Info(vertexGudang2);
-    edge.nama = jalan;
-    edge.jarak = jarak;
+    Jalan jalanBaru1;
+    jalanBaru1.gudang = Info(vertexGudang2);
+    jalanBaru1.nama = jalan;
+    jalanBaru1.jarak = jarak;
 
     if (macet == "ya" || macet == "Ya") {
-        edge.macet = true;
+        jalanBaru1.macet = true;
     } else if (macet == "tidak" || macet == "Tidak") {
-        edge.macet = false;
+        jalanBaru1.macet = false;
     } else {
         cout << "Input untuk macet tidak valid. Gunakan 'ya' atau 'tidak'." << endl;
         return;
     }
+    Addr_Edge edge1 = Alokasi_Edge(jalanBaru1);
+    InsertLast_Edge(G, vertexGudang1, edge1);
 
-    Addr_Edge newEdge = Alokasi_Edge(edge);
-    NextEdge(newEdge) = FirstEdge(vertexGudang1);
-    FirstEdge(vertexGudang1) = newEdge;
+    Jalan jalanBaru2;
+    jalanBaru2.gudang = Info(vertexGudang1);
+    jalanBaru2.nama = jalan;
+    jalanBaru2.jarak = jarak;
 
-    Addr_Edge reverseEdge = Alokasi_Edge(edge);
-    Info(reverseEdge).gudang = Info(vertexGudang1);
-    NextEdge(reverseEdge) = FirstEdge(vertexGudang2);
-    FirstEdge(vertexGudang2) = reverseEdge;
+    if (macet == "ya" || macet == "Ya") {
+        jalanBaru2.macet = true;
+    } else if (macet == "tidak" || macet == "Tidak") {
+        jalanBaru2.macet = false;
+    } else {
+        cout << "Input untuk macet tidak valid. Gunakan 'ya' atau 'tidak'." << endl;
+        return;
+    }
+    Addr_Edge edge2 = Alokasi_Edge(jalanBaru2);
+    InsertLast_Edge(G, vertexGudang2, edge2);
 
     cout << "Jalan antara " << gudang1 << " dan " << gudang2 << " telah berhasil dihubungkan!" << endl;
 }
@@ -304,44 +325,49 @@ void Connecting_PomBensin_To_Gudang(Graph &G, string gudang, string pomBensin, s
     Addr_Vertex_Gudang vertexGudang = Find_Vertex_Gudang(G, gudang);
 
     if (vertexPomBensin != NULL && vertexGudang != NULL) {
-        Infotype_Edge edge;
-        edge.gudang = Info(vertexGudang);
-        edge.nama = jalan;
-        edge.jarak = jarak;
+        Jalan jalanBaru1;
+        jalanBaru1.gudang = Info(vertexGudang);
+        jalanBaru1.nama = jalan;
+        jalanBaru1.jarak = jarak;
 
         if (macet == "ya" || macet == "Ya") {
-            edge.macet = true;
+            jalanBaru1.macet = true;
         } else if (macet == "tidak" || macet == "Tidak") {
-            edge.macet = false;
+            jalanBaru1.macet = false;
         } else {
             cout << "Input untuk macet tidak valid. Gunakan 'ya' atau 'tidak'." << endl;
             return;
         }
 
-        Addr_Edge newEdge = Alokasi_Edge(edge);
+        Addr_Edge newEdge = Alokasi_Edge(jalanBaru1);
         if (newEdge == NULL) {
             cout << "Gagal mengalokasikan edge baru." << endl;
             return;
         }
+        InsertLast_Edge(G, vertexGudang, newEdge);
 
-        NextEdge(newEdge) = FirstEdge(vertexPomBensin);
-        FirstEdge(vertexPomBensin) = newEdge;
+        Jalan jalanBaru2;
+        jalanBaru2.gudang = Info(vertexGudang);  // Isi dengan info gudang
+        jalanBaru2.pomBensin = Info(vertexPomBensin);
+        jalanBaru2.nama = jalan;
+        jalanBaru2.jarak = jarak;
 
-        Infotype_Edge reverseEdgeInfo;
-        reverseEdgeInfo.gudang = Info(vertexGudang);  // Isi dengan info gudang
-        reverseEdgeInfo.pomBensin = Info(vertexPomBensin);
-        reverseEdgeInfo.nama = jalan;
-        reverseEdgeInfo.jarak = jarak;
-        reverseEdgeInfo.macet = edge.macet;
+        if (macet == "ya" || macet == "Ya") {
+            jalanBaru2.macet = true;
+        } else if (macet == "tidak" || macet == "Tidak") {
+            jalanBaru2.macet = false;
+        } else {
+            cout << "Input untuk macet tidak valid. Gunakan 'ya' atau 'tidak'." << endl;
+            return;
+        }
 
-        Addr_Edge reverseEdge = Alokasi_Edge(reverseEdgeInfo);
+        Addr_Edge reverseEdge = Alokasi_Edge(jalanBaru2);
         if (reverseEdge == NULL) {
             cout << "Gagal mengalokasikan reverse edge." << endl;
             return;
         }
+        InsertLast_Edge(G, vertexGudang, reverseEdge);
 
-        NextEdge(reverseEdge) = FirstEdge(vertexGudang);
-        FirstEdge(vertexGudang) = reverseEdge;
 
         cout << "Jalan antara Pom Bensin " << pomBensin << " dan Gudang " << gudang << " telah berhasil dihubungkan!" << endl;
     } else {
@@ -376,25 +402,29 @@ void Connecting_Gudang_To_PomBensin(Graph &G, string pomBensin, string gudang, s
             cout << "Gagal mengalokasikan edge baru." << endl;
             return;
         }
-
-        NextEdge(newEdge) = FirstEdge(vertexGudang);
-        FirstEdge(vertexGudang) = newEdge;
+        InsertLast_Edge(G, vertexGudang, newEdge);
 
         Infotype_Edge reverseEdgeInfo;
         reverseEdgeInfo.gudang = Info(vertexGudang);
         reverseEdgeInfo.pomBensin = Info(vertexPomBensin);
         reverseEdgeInfo.nama = jalan;
         reverseEdgeInfo.jarak = jarak;
-        reverseEdgeInfo.macet = edge.macet;
+
+        if (macet == "ya" || macet == "Ya") {
+            reverseEdgeInfo.macet = true;
+        } else if (macet == "tidak" || macet == "Tidak") {
+            reverseEdgeInfo.macet = false;
+        } else {
+            cout << "Input untuk macet tidak valid. Gunakan 'ya' atau 'tidak'." << endl;
+            return;
+        }
 
         Addr_Edge reverseEdge = Alokasi_Edge(reverseEdgeInfo);
         if (reverseEdge == NULL) {
             cout << "Gagal mengalokasikan reverse edge." << endl;
             return;
         }
-
-        NextEdge(reverseEdge) = FirstEdge(vertexPomBensin);
-        FirstEdge(vertexPomBensin) = reverseEdge;
+        InsertLast_Edge(G, vertexGudang, reverseEdge);
 
         cout << "Jalan antara Gudang " << gudang << " dan Pom Bensin " << pomBensin << " telah berhasil dihubungkan!" << endl;
     } else {
@@ -492,12 +522,22 @@ Addr_Edge Rute_Alternatif(Graph &G, Addr_Vertex_Gudang pengirim, Addr_Vertex_Gud
     return NULL;
 }
 
-void Catat_Jalan(Graph &G);
+void Catat_Jalan(Graph &G, Infotype_Gudang &gudangA, Infotype_Gudang &GudangB, Infotype_Edge &jalur, Infotype_Truck &truk){
+    Addr_Vertex_Gudang nodeA = Find_Vertex_Gudang(G, gudangA.nama);
+    Addr_Vertex_Gudang nodeB = Find_Vertex_Gudang(G, GudangB.nama);
+    if (nodeA != NULL && nodeB != NULL)
+    {
+        Addr_Edge newEdge1 = Alokasi_Edge({jalur.nama, 0, 0});
+        NextEdge(newEdge1) = FirstEdge(nodeA);
+        FirstEdge(nodeA) = newEdge1;
+        cout << "Jalur dari " << gudangA.nama << " melalui " << jalur.nama << " ke " << GudangB.nama << " dengan truk " << truk.nama << " telah dicatat." << endl;
+    }
+}
 
 void Rute_Tercepat(Graph &G, Addr_Truck truk, Addr_Vertex_Gudang pengirim, Addr_Vertex_Gudang penerima, int jumBarang) {
     double biayaPerjalanan = 0;
     Addr_Edge edge = FirstEdge(pengirim);
-    bool ditemukan = false;
+    //bool ditemukan = false;
 
     // Pencarian rute pertama
     while (edge != NULL) {
@@ -574,6 +614,8 @@ void Rute_Tercepat(Graph &G, Addr_Truck truk, Addr_Vertex_Gudang pengirim, Addr_
         penerima->Info.barang += jumBarang;
         cout << "Total biaya perjalanan: " << biayaPerjalanan << endl;
     }
+    // Catat jalur yang sudah ditempuh
+    Catat_Jalan(G, Info(pengirim), Info(penerima), Info(edge), Info(truk));
 }
 
 
@@ -684,4 +726,3 @@ void Show_Trucks(TruckList &T) {
     }
     cout << "=============================================================\n";
 }
-

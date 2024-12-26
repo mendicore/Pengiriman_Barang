@@ -1,8 +1,7 @@
-#include "Rute.h"
+#include "Pengiriman.h"
 
-using namespace std;
-
-int main(){
+int main(int argc, char** argv)
+{
     Graph G;
     TruckList T;
 
@@ -479,8 +478,13 @@ int main(){
                 }
                 break;
             }
+            case 0:
+                cout << "Terima kasih telah menggunakan layanan 'Manajer Gudang'" << endl;
+                break;
+            default:
+                cout << "angka yang dimasukkan tidak valid, silahkan coba lagi!" << endl;
+                break;
         }
     }while(choice != 0);
-
     return 0;
 }
