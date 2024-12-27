@@ -9,8 +9,153 @@ int main(int argc, char** argv)
     CreateGraph(G);
     CreatePomBensin(GPB);
     CreateTruck(T);
+    Infotype_Node gudang1, gudang2, gudang3, gudang4, gudang5, gudang6, gudang7, gudang8, gudang9, gudang10;
+
+    // Gudang 1
+    gudang1.nama = "Makmur";
+    gudang1.lokasi = "Jakarta";
+    gudang1.kapasitas = 5000;
+    gudang1.jumlah = 4200;
+    Addr_Node newGudang1 = AlokasiNode(gudang1);
+    AddNewNode(G, newGudang1);
+
+    // Gudang 2
+    gudang2.nama = "Sentosa";
+    gudang2.lokasi = "Surabaya";
+    gudang2.kapasitas = 7000;
+    gudang2.jumlah = 6700;
+    Addr_Node newGudang2 = AlokasiNode(gudang2);
+    AddNewNode(G, newGudang2);
+
+    // Gudang 3
+    gudang3.nama = "Sejahtera";
+    gudang3.lokasi = "Bandung";
+    gudang3.kapasitas = 6000;
+    gudang3.jumlah = 5100;
+    Addr_Node newGudang3 = AlokasiNode(gudang3);
+    AddNewNode(G, newGudang3);
+
+    // Gudang 4
+    gudang4.nama = "Mandiri";
+    gudang4.lokasi = "Semarang";
+    gudang4.kapasitas = 8000;
+    gudang4.jumlah = 6900;
+    Addr_Node newGudang4 = AlokasiNode(gudang4);
+    AddNewNode(G, newGudang4);
+
+    // Gudang 5
+    gudang5.nama = "Surya";
+    gudang5.lokasi = "Medan";
+    gudang5.kapasitas = 5500;
+    gudang5.jumlah = 4800;
+    Addr_Node newGudang5 = AlokasiNode(gudang5);
+    AddNewNode(G, newGudang5);
+
+    // Gudang 6
+    gudang6.nama = "Cemerlang";
+    gudang6.lokasi = "Yogyakarta";
+    gudang6.kapasitas = 4500;
+    gudang6.jumlah = 3900;
+    Addr_Node newGudang6 = AlokasiNode(gudang6);
+    AddNewNode(G, newGudang6);
+
+    // Gudang 7
+    gudang7.nama = "Emas";
+    gudang7.lokasi = "Bali";
+    gudang7.kapasitas = 6500;
+    gudang7.jumlah = 6200;
+    Addr_Node newGudang7 = AlokasiNode(gudang7);
+    AddNewNode(G, newGudang7);
+
+    // Gudang 8
+    gudang8.nama = "Sehat";
+    gudang8.lokasi = "Surabaya";
+    gudang8.kapasitas = 5500;
+    gudang8.jumlah = 4700;
+    Addr_Node newGudang8 = AlokasiNode(gudang8);
+    AddNewNode(G, newGudang8);
+
+    // Gudang 9
+    gudang9.nama = "Otomotif";
+    gudang9.lokasi = "Jakarta";
+    gudang9.kapasitas = 7000;
+    gudang9.jumlah = 6300;
+    Addr_Node newGudang9 = AlokasiNode(gudang9);
+    AddNewNode(G, newGudang9);
+
+    // Gudang 10
+    gudang10.nama = "Bagus";
+    gudang10.lokasi = "Bekasi";
+    gudang10.kapasitas = 8000;
+    gudang10.jumlah = 7200;
+    Addr_Node newGudang10 = AlokasiNode(gudang10);
+    AddNewNode(G, newGudang10);
+
+    InfoType_Bensin pombensin1;
+    InfoType_Bensin pombensin2;
+    InfoType_Bensin pombensin3;
+
+    // Pom Bensin 1
+    pombensin1.nama = "Pertamina";
+    pombensin1.kapasitas = 15000;
+    pombensin1.lokasi = "Cibubur";
+    Addr_Bensin newPomBensin1 = AlokasiBensin(pombensin1);
+    AddNewPomBensin(GPB, newPomBensin1);
+
+    // Pom Bensin 2
+    pombensin2.nama = "Shell";
+    pombensin2.kapasitas = 12000;
+    pombensin2.lokasi = "Bogor";
+    Addr_Bensin newPomBensin2 = AlokasiBensin(pombensin2);
+    AddNewPomBensin(GPB, newPomBensin2);
+
+    // Pom Bensin 3
+    pombensin3.nama = "Total";
+    pombensin3.kapasitas = 10000;
+    pombensin3.lokasi = "Bandung";
+    Addr_Bensin newPomBensin3 = AlokasiBensin(pombensin3);
+    AddNewPomBensin(GPB, newPomBensin3);
+
+
+    infotype_Truck truck1, truck2;
+
+    // Truck 1
+    truck1.name = "Vortex";
+    truck1.kapasitas = 8000;
+    truck1.muatan = 0;
+    truck1.bensin = 150;
+    adr_Truck newTruck1 = Alokasi(truck1);
+    addTruck(T, newTruck1);
+
+    // Truck 2
+    truck2.name = "Titan";
+    truck2.kapasitas = 10000;
+    truck2.muatan = 0;
+    truck2.bensin = 120;
+    adr_Truck newTruck2 = Alokasi(truck2);
+    addTruck(T, newTruck2);
+
+
+    Connecting(G, "Makmur", "Sejahtera", "Jalan Merpati Raya", 3.5, 20, "tidak");
+    Connecting(G, "Sejahtera", "Mandiri", "Jalan Pahlawan", 1.2, 30, "tidak");
+    Connecting_Gudang_Bensin(G, "Makmur", "Total", "Jalan Bunga Melati", 4.7, 50, "tidak");
+    Connecting_Bensin_Gudang(G, "Total", "Surya", "Jalan Cendrawasih", 2.3, 30, "tidak");
+    Connecting(G, "Surya", "Mandiri", "Jalan Mutiara Biru", 5.1, 17, "tidak");
+    Connecting(G, "Mandiri", "Emas", "Jalan Damarwulan ", 6, 40, "tidak");
+    Connecting(G, "Mandiri", "Cemerlang", "Jalan Seroja ", 2.8, 12, "tidak");
+    Connecting_Gudang_Bensin(G, "Cemerlang", "Pertamina", "Jalan Kenanga", 3.9, 27, "ya");
+    Connecting_Bensin_Gudang(G, "Pertamina", "Emas", "Jalan Taman Sari ", 1.6, 55, "tidak");
+    Connecting_Bensin_Gudang(G, "Pertamina", "Sehat", "Jalan Gunung Bromo ", 7.4, 60, "tidak");
+    Connecting(G, "Emas", "Otomotif", "Jalan Surya Kencana", 4.2, 20, "tidak");
+    Connecting(G, "Emas", "Bagus", "Jalan Bintang Laut", 3, 15, "ya");
+    Connecting(G, "Sehat", "Otomotif", "Jalan Cipta Karya ", 2.5, 56, "tidak");
+    Connecting(G, "Bagus", "Otomotif", "Jalan Alam Raya ", 5.6, 25, "tidak");
+    Connecting(G, "Bagus", "Sentosa", "Jalan Puspa Indah ", 6.8, 55, "tidak");
+    Connecting_Gudang_Bensin(G, "Otomotif", "Shell", "Jalan Pahlawan Tani", 4.3, 15, "tidak");
+    Connecting_Bensin_Gudang(G, "Shell", "Sentosa", "Jalan Cempaka Putih  ", 2.9, 22, "tidak");
+
     int choice;
-    string node1, node2, station, namaJalan;
+    string node1, node2, station, namaJalan, macet;
     double distance;
     int waktu;
 
