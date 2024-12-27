@@ -9,6 +9,7 @@ int main(int argc, char** argv)
     CreateGraph(G);
     CreatePomBensin(GPB);
     CreateTruck(T);
+
     Infotype_Node gudang1, gudang2, gudang3, gudang4, gudang5, gudang6, gudang7, gudang8, gudang9, gudang10;
 
     // Gudang 1
@@ -276,7 +277,8 @@ int main(int argc, char** argv)
                 cin >> truck.bensin;
 
                 truck.muatan = 0;
-                addTruck(T, truck);
+                adr_Truck truk = Alokasi(truck);
+                addTruck(T, truk);
 
                 cout << "Truck " << truck.name << " berhasil ditambahkan!" << endl << endl;
                 break;
@@ -300,7 +302,9 @@ int main(int argc, char** argv)
                 cin >> distance;
                 cout << "Masukkan waktu perjalanan: ";
                 cin >> waktu;
-                Connecting(G, node1, node2, namaJalan, distance, waktu);
+                cout << "Apakah macet? ";
+                getline(cin, macet);
+                Connecting(G, node1, node2, namaJalan, distance, waktu, macet);
                 cout << "Gudang " << node1 << " dan " << node2 << " berhasil dihubungkan!" << endl << endl;
                 break;
             }
@@ -338,7 +342,9 @@ int main(int argc, char** argv)
                 cin >> distance;
                 cout << "Masukkan waktu perjalanan: ";
                 cin >> waktu;
-                Connecting_Gudang_Bensin(G, node1, station, namaJalan, distance, waktu);
+                cout << "Apakah macet? ";
+                getline(cin, macet);
+                Connecting_Gudang_Bensin(G, node1, station, namaJalan, distance, waktu, macet);
                 cout << "Gudang " << node1 << " dan Pom Bensin " << station << " berhasil dihubungkan!" << endl << endl;
                 break;
             }
@@ -356,7 +362,9 @@ int main(int argc, char** argv)
                 cin >> distance;
                 cout << "Masukkan waktu perjalanan: ";
                 cin >> waktu;
-                Connecting_Bensin_Gudang(G, station, node2, namaJalan, distance, waktu);
+                cout << "Apakah macet? ";
+                getline(cin, macet);
+                Connecting_Bensin_Gudang(G, station, node2, namaJalan, distance, waktu, macet);
                 cout << "Pom Bensin " << station << " dan Gudang " << node2 << " berhasil dihubungkan!" << endl << endl;
                 break;
             }
@@ -452,7 +460,7 @@ int main(int argc, char** argv)
                 // Lakukan pengiriman dan catat jalu
                 infotype_Truck truck;
                 Infotype_Node GudangA, GudangB;
-                Infotype_Edge jalur;
+                Infotype_Edge lajur;
                 double bensin, barang, jarak, biayaPerMuatan;
 
                 cout << "Masukkan nama truk yang akan digunakan: ";
@@ -505,7 +513,7 @@ int main(int argc, char** argv)
                             cout << "Masukkan jarak 2 gudang: ";
                             cin >> jarak;
 
-                            Pengiriman(T, G, pengirim, penerima, jalur, truck, bensin, barang, jarak);
+                            Pengiriman(T, G, pengirim, penerima, lajur, truck, bensin, barang, jarak);
 
                             foundTruck->info.kapasitas -= barang;
                             cout << "Barang berhasil diantar. Sisa kapasitas truk: " << foundTruck->info.kapasitas << endl;
@@ -515,6 +523,18 @@ int main(int argc, char** argv)
 
                             double biayaPerKM = barang * jarak;
                             cout << "Total biaya: " << biayaPengiriman(T, truck.name, biayaPerMuatan, biayaPerKM, jarak) << endl;
+
+                            cout << "Masukkan nama jalur: ";
+                            getline(cin, lajur.namaJalan);
+                            Addr_Edge Jalur = FindEdge(G, Jalur, lajur.namaJalan);
+                            if(Jalur != NULL){
+                                CatatJalur(G, pengirim, penerima, jalur, truck);
+                            }
+                            else
+                            {
+                                cout << "Jalur tidak ada!" << endl;
+                                break;
+                            }
                         } else {
                             cout << "Gudang penerima tidak ditemukan!" << endl;
                         }
@@ -526,7 +546,6 @@ int main(int argc, char** argv)
                 }
                 break;
             }
-
 
             case 0: {
                 // Keluar Program
