@@ -198,15 +198,20 @@ bool ApakahMacetatauHambatan(Graph &G, const Infotype_Node &gudang, const Infoty
     return false;
 }
 
-void CatatJalur(Graph &G, const Infotype_Node &gudangA, const Infotype_Node &GudangB, const Infotype_Edge &jalur, const infotype_Truck &truk){
+void CatatJalur(Graph &G, const Infotype_Node &gudangA, const Infotype_Node &GudangB, const Infotype_Edge &jalur, const infotype_Truck &truk) {
     Addr_Node nodeA = FindNode(G, gudangA.nama);
     Addr_Node nodeB = FindNode(G, GudangB.nama);
-    if (nodeA != Null && nodeB != Null)
-    {
+    if (nodeA != NULL && nodeB != NULL && !Info(nodeA).nama.empty() && !Info(nodeB).nama.empty()) {
         Addr_Edge newEdge1 = AlokasiEdge({jalur.namaJalan, 0, 0});
-        NextEdge(newEdge1) = FirstEdge(nodeA);
-        FirstEdge(nodeA) = newEdge1;
-        cout << "Jalur dari " << gudangA.nama << " melalui " << jalur.namaJalan << " ke " << GudangB.nama << " dengan truk " << truk.name << " telah dicatat." << endl;
+        if (newEdge1 != NULL) {
+            NextEdge(newEdge1) = FirstEdge(nodeA);
+            FirstEdge(nodeA) = newEdge1;
+            cout << "Jalur dari " << gudangA.nama << " melalui " << jalur.namaJalan << " ke " << GudangB.nama << " dengan truk " << truk.name << " telah dicatat." << endl;
+        } else {
+            cout << "Gagal mengalokasikan edge baru." << endl;
+        }
+    } else {
+        cout << "Gudang pengirim atau penerima tidak ditemukan!" << endl;
     }
 }
 
@@ -243,6 +248,7 @@ void Pengiriman(TruckList &T, Graph &G, const Infotype_Node &gudangA, const Info
         CreateTempList(jalurAlternatif);
         jalurAlternatifDFS(G, gudangA, gudangB, jalur);
         AlJikstra(G, gudangA, gudangB, jalurAlternatif);
+
     }
     double bensinDiperlukan = BensinperKapasitas(T, truk.name, bensin, muatan, jarak);
     if(BensinperKapasitas(T, truk.name, bensin, muatan, jarak) < bensinDiperlukan)
@@ -252,6 +258,5 @@ void Pengiriman(TruckList &T, Graph &G, const Infotype_Node &gudangA, const Info
         getline(cin, R.lokasi);
         isiBensin(T, G, R.lokasi, truk, bensin, muatan, jarak);
     }
-    CatatJalur(G, gudangA, gudangB, jalur, truk);
     cout << "Rute yang dipilih: " << jalur.namaJalan << " dengan bensin yang diperlukan: " << bensinDiperlukan << " liter." << endl;
 }

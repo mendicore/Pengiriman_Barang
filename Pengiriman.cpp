@@ -138,15 +138,27 @@ void Add_Truck(TruckList &T, Addr_Truck P) {
     }
 }
 
-void InsertLast_Edge(Graph &G, Addr_Vertex_Gudang node, Addr_Edge newEdge) {
-    if (node->FirstEdge == NULL) {
-        node->FirstEdge = newEdge;
-    } else {
-        Addr_Edge temp = node->FirstEdge;
-        while (temp->NextEdge != NULL) {
-            temp = temp->NextEdge;
+void InsertLast_Edge(Graph &G, Addr_Vertex_Gudang nodeGudang, Addr_Vertex_PomBensin nodePomBensin, Addr_Edge newEdge) {
+    if (nodeGudang != NULL) {
+        if (nodeGudang->FirstEdge == NULL) {
+            nodeGudang->FirstEdge = newEdge;
+        } else {
+            Addr_Edge temp = nodeGudang->FirstEdge;
+            while (temp->NextEdge != NULL) {
+                temp = temp->NextEdge;
+            }
+            temp->NextEdge = newEdge;
         }
-        temp->NextEdge = newEdge;
+    } else if (nodePomBensin != NULL) {
+        if (nodePomBensin->FirstEdge == NULL) {
+            nodePomBensin->FirstEdge = newEdge;
+        } else {
+            Addr_Edge temp = nodePomBensin->FirstEdge;
+            while (temp->NextEdge != NULL) {
+                temp = temp->NextEdge;
+            }
+            temp->NextEdge = newEdge;
+        }
     }
 }
 
@@ -241,7 +253,7 @@ void Connecting_Gudang(Graph &G, string gudang1, string gudang2, string jalan, d
         return;
     }
     Addr_Edge edge1 = Alokasi_Edge(jalanBaru1);
-    InsertLast_Edge(G, vertexGudang1, edge1);
+    InsertLast_Edge(G, vertexGudang1, NULL, edge1);
 
     Jalan jalanBaru2;
     jalanBaru2.gudang = Info(vertexGudang1);
@@ -257,7 +269,7 @@ void Connecting_Gudang(Graph &G, string gudang1, string gudang2, string jalan, d
         return;
     }
     Addr_Edge edge2 = Alokasi_Edge(jalanBaru2);
-    InsertLast_Edge(G, vertexGudang2, edge2);
+    InsertLast_Edge(G, vertexGudang2, NULL, edge2);
 
     cout << "Jalan antara " << gudang1 << " dan " << gudang2 << " telah berhasil dihubungkan!" << endl;
 }
@@ -327,6 +339,7 @@ void Connecting_PomBensin_To_Gudang(Graph &G, string gudang, string pomBensin, s
     if (vertexPomBensin != NULL && vertexGudang != NULL) {
         Jalan jalanBaru1;
         jalanBaru1.gudang = Info(vertexGudang);
+        jalanBaru1.pomBensin = Info(vertexPomBensin);
         jalanBaru1.nama = jalan;
         jalanBaru1.jarak = jarak;
 
@@ -344,30 +357,22 @@ void Connecting_PomBensin_To_Gudang(Graph &G, string gudang, string pomBensin, s
             cout << "Gagal mengalokasikan edge baru." << endl;
             return;
         }
-        InsertLast_Edge(G, vertexGudang, newEdge);
+        InsertLast_Edge(G, vertexGudang, NULL, newEdge);
 
+        // Create reverse edge
         Jalan jalanBaru2;
-        jalanBaru2.gudang = Info(vertexGudang);  // Isi dengan info gudang
+        jalanBaru2.gudang = Info(vertexGudang);
         jalanBaru2.pomBensin = Info(vertexPomBensin);
         jalanBaru2.nama = jalan;
         jalanBaru2.jarak = jarak;
-
-        if (macet == "ya" || macet == "Ya") {
-            jalanBaru2.macet = true;
-        } else if (macet == "tidak" || macet == "Tidak") {
-            jalanBaru2.macet = false;
-        } else {
-            cout << "Input untuk macet tidak valid. Gunakan 'ya' atau 'tidak'." << endl;
-            return;
-        }
+        jalanBaru2.macet = jalanBaru1.macet;
 
         Addr_Edge reverseEdge = Alokasi_Edge(jalanBaru2);
         if (reverseEdge == NULL) {
             cout << "Gagal mengalokasikan reverse edge." << endl;
             return;
         }
-        InsertLast_Edge(G, vertexGudang, reverseEdge);
-
+        InsertLast_Edge(G, NULL, vertexPomBensin, reverseEdge);
 
         cout << "Jalan antara Pom Bensin " << pomBensin << " dan Gudang " << gudang << " telah berhasil dihubungkan!" << endl;
     } else {
@@ -375,15 +380,13 @@ void Connecting_PomBensin_To_Gudang(Graph &G, string gudang, string pomBensin, s
     }
 }
 
-
-
-
 void Connecting_Gudang_To_PomBensin(Graph &G, string pomBensin, string gudang, string jalan, double jarak, string macet) {
     Addr_Vertex_Gudang vertexGudang = Find_Vertex_Gudang(G, gudang);
     Addr_Vertex_PomBensin vertexPomBensin = Find_Vertex_PomBensin(G, pomBensin);
 
     if (vertexGudang != NULL && vertexPomBensin != NULL) {
         Infotype_Edge edge;
+        edge.gudang = Info(vertexGudang);
         edge.pomBensin = Info(vertexPomBensin);
         edge.nama = jalan;
         edge.jarak = jarak;
@@ -402,64 +405,27 @@ void Connecting_Gudang_To_PomBensin(Graph &G, string pomBensin, string gudang, s
             cout << "Gagal mengalokasikan edge baru." << endl;
             return;
         }
-        InsertLast_Edge(G, vertexGudang, newEdge);
+        InsertLast_Edge(G, vertexGudang, NULL, newEdge);
 
+        // Create reverse edge
         Infotype_Edge reverseEdgeInfo;
         reverseEdgeInfo.gudang = Info(vertexGudang);
         reverseEdgeInfo.pomBensin = Info(vertexPomBensin);
         reverseEdgeInfo.nama = jalan;
         reverseEdgeInfo.jarak = jarak;
-
-        if (macet == "ya" || macet == "Ya") {
-            reverseEdgeInfo.macet = true;
-        } else if (macet == "tidak" || macet == "Tidak") {
-            reverseEdgeInfo.macet = false;
-        } else {
-            cout << "Input untuk macet tidak valid. Gunakan 'ya' atau 'tidak'." << endl;
-            return;
-        }
+        reverseEdgeInfo.macet = edge.macet;
 
         Addr_Edge reverseEdge = Alokasi_Edge(reverseEdgeInfo);
         if (reverseEdge == NULL) {
             cout << "Gagal mengalokasikan reverse edge." << endl;
             return;
         }
-        InsertLast_Edge(G, vertexGudang, reverseEdge);
+        InsertLast_Edge(G, NULL, vertexPomBensin, reverseEdge);
 
         cout << "Jalan antara Gudang " << gudang << " dan Pom Bensin " << pomBensin << " telah berhasil dihubungkan!" << endl;
     } else {
         cout << "Gudang atau Pom Bensin tidak ditemukan!" << endl;
     }
-}
-
-
-void Disconnecting_PomBensin_Gudang(Graph &G, string gudang, string pomBensin) {
-    Addr_Vertex_PomBensin vertexPomBensin = Find_Vertex_PomBensin(G, pomBensin);
-    Addr_Vertex_Gudang vertexGudang = Find_Vertex_Gudang(G, gudang);
-
-    if (vertexPomBensin == NULL || vertexGudang == NULL) {
-        cout << "Gudang atau Pom Bensin tidak ditemukan!" << endl;
-        return;
-    }
-
-    Addr_Edge edge = FirstEdge(vertexPomBensin);
-    Addr_Edge prevEdge = NULL;
-
-    while (edge != NULL) {
-        if (Info(edge).gudang.nama == gudang) {
-            if (prevEdge == NULL) {
-                FirstEdge(vertexPomBensin) = NextEdge(edge);
-            } else {
-                NextEdge(prevEdge) = NextEdge(edge);
-            }
-            delete edge;  // Mengganti free() dengan delete
-            cout << "Jalan antara Pom Bensin " << pomBensin << " dan Gudang " << gudang << " telah diputus." << endl;
-            return;
-        }
-        prevEdge = edge;
-        edge = NextEdge(edge);
-    }
-    cout << "Jalan antara Pom Bensin " << pomBensin << " dan Gudang " << gudang << " tidak ditemukan!" << endl;
 }
 
 void Disconnecting_Gudang_PomBensin(Graph &G, string pomBensin, string gudang) {
@@ -492,6 +458,36 @@ void Disconnecting_Gudang_PomBensin(Graph &G, string pomBensin, string gudang) {
 }
 
 
+void Disconnecting_PomBensin_Gudang(Graph &G, string gudang, string pomBensin) {
+    Addr_Vertex_PomBensin vertexPomBensin = Find_Vertex_PomBensin(G, pomBensin);
+    Addr_Vertex_Gudang vertexGudang = Find_Vertex_Gudang(G, gudang);
+
+    if (vertexPomBensin == NULL || vertexGudang == NULL) {
+        cout << "Gudang atau Pom Bensin tidak ditemukan!" << endl;
+        return;
+    }
+
+    Addr_Edge edge = FirstEdge(vertexPomBensin);
+    Addr_Edge prevEdge = NULL;
+
+    while (edge != NULL) {
+        if (Info(edge).gudang.nama == gudang) {
+            if (prevEdge == NULL) {
+                FirstEdge(vertexPomBensin) = NextEdge(edge);
+            } else {
+                NextEdge(prevEdge) = NextEdge(edge);
+            }
+            delete edge;  // Mengganti free() dengan delete
+            cout << "Jalan antara Pom Bensin " << pomBensin << " dan Gudang " << gudang << " telah diputus." << endl;
+            return;
+        }
+        prevEdge = edge;
+        edge = NextEdge(edge);
+    }
+    cout << "Jalan antara Pom Bensin " << pomBensin << " dan Gudang " << gudang << " tidak ditemukan!" << endl;
+}
+
+
 // main fitur
 Addr_Vertex_PomBensin Cari_PomBensin_Terdekat(Graph &G, Addr_Vertex_Gudang gudang) {
     Addr_Vertex_PomBensin pomBensin = StartPomBensin(G);
@@ -499,7 +495,7 @@ Addr_Vertex_PomBensin Cari_PomBensin_Terdekat(Graph &G, Addr_Vertex_Gudang gudan
     int minDistance = INT_MAX;
 
     while (pomBensin != NULL) {
-        int distance = abs(gudang->Info.lokasi[0] - pomBensin->Info.lokasi[0]);
+        int distance = abs(Info(gudang).lokasi[0] - Info(pomBensin).lokasi[0]);
         if (distance < minDistance) {
             minDistance = distance;
             nearestPom = pomBensin;
@@ -510,11 +506,11 @@ Addr_Vertex_PomBensin Cari_PomBensin_Terdekat(Graph &G, Addr_Vertex_Gudang gudan
     return nearestPom;
 }
 
-Addr_Edge Rute_Alternatif(Graph &G, Addr_Vertex_Gudang pengirim, Addr_Vertex_Gudang penerima){
-     Addr_Edge edge = FirstEdge(pengirim);
+Addr_Edge Rute_Alternatif(Graph &G, Addr_Vertex_Gudang pengirim, Addr_Vertex_Gudang penerima) {
+    Addr_Edge edge = FirstEdge(pengirim);
 
     while (edge != NULL) {
-        if (edge->Info.gudang.nama != penerima->Info.nama && !edge->Info.macet) {
+        if (!Info(edge).gudang.nama.empty() && Info(edge).gudang.nama != Info(penerima).nama && !Info(edge).macet) {
             return edge;
         }
         edge = edge->NextEdge;
@@ -522,40 +518,42 @@ Addr_Edge Rute_Alternatif(Graph &G, Addr_Vertex_Gudang pengirim, Addr_Vertex_Gud
     return NULL;
 }
 
-void Catat_Jalan(Graph &G, Infotype_Gudang &gudangA, Infotype_Gudang &GudangB, Infotype_Edge &jalur, Infotype_Truck &truk){
+
+void Catat_Jalan(Graph &G, Infotype_Gudang &gudangA, Infotype_Gudang &GudangB, Infotype_Edge &jalur, Infotype_Truck &truk) {
     Addr_Vertex_Gudang nodeA = Find_Vertex_Gudang(G, gudangA.nama);
     Addr_Vertex_Gudang nodeB = Find_Vertex_Gudang(G, GudangB.nama);
-    if (nodeA != NULL && nodeB != NULL)
-    {
+    if (nodeA != NULL && nodeB != NULL && !Info(nodeA).nama.empty() && !Info(nodeB).nama.empty()) {
         Addr_Edge newEdge1 = Alokasi_Edge({jalur.nama, 0, 0});
+        if(newEdge1 != NULL){
         NextEdge(newEdge1) = FirstEdge(nodeA);
         FirstEdge(nodeA) = newEdge1;
+        }
         cout << "Jalur dari " << gudangA.nama << " melalui " << jalur.nama << " ke " << GudangB.nama << " dengan truk " << truk.nama << " telah dicatat." << endl;
     }
 }
 
+
 void Rute_Tercepat(Graph &G, Addr_Truck truk, Addr_Vertex_Gudang pengirim, Addr_Vertex_Gudang penerima, int jumBarang) {
     double biayaPerjalanan = 0;
     Addr_Edge edge = FirstEdge(pengirim);
-    //bool ditemukan = false;
 
     // Pencarian rute pertama
     while (edge != NULL) {
-        if (edge->Info.gudang.nama == penerima->Info.nama) {
-            cout << "Mengambil jalan: " << edge->Info.nama << " dengan jarak: " << edge->Info.jarak << endl;
+        if (!Info(edge).gudang.nama.empty() && Info(edge).gudang.nama == Info(penerima).nama) {
+            cout << "Mengambil jalan: " << Info(edge).nama << " dengan jarak: " << Info(edge).jarak << endl;
 
-            if (edge->Info.macet) {
+            if (Info(edge).macet) {
                 cout << "Jalan ini macet, menghindari!" << endl;
-                edge = edge->NextEdge;
+                edge = NextEdge(edge);
                 continue;
             }
 
-            truk->Info.bensin -= edge->Info.jarak * 0.1;
-            biayaPerjalanan += edge->Info.jarak * 100;
+            Info(truk).bensin -= Info(edge).jarak * 0.1;
+            biayaPerjalanan += Info(edge).jarak * 100;
 
             cout << "Sisa bensin truk: " << truk->Info.bensin << endl;
 
-            if (truk->Info.bensin <= 0) {
+            if (Info(truk).bensin <= 0) {
                 Addr_Vertex_PomBensin pomBensinTerdekat = Cari_PomBensin_Terdekat(G, pengirim);
 
                 if (pomBensinTerdekat != NULL) {
@@ -563,8 +561,8 @@ void Rute_Tercepat(Graph &G, Addr_Truck truk, Addr_Vertex_Gudang pengirim, Addr_
                     double bensinYangDiperlukan = abs(truk->Info.bensin);
 
                     if (bensinDiPom >= bensinYangDiperlukan) {
-                        truk->Info.bensin += bensinYangDiperlukan;
-                        pomBensinTerdekat->Info.stokBensin -= bensinYangDiperlukan;
+                        Info(truk).bensin += bensinYangDiperlukan;
+                        Info(pomBensinTerdekat).stokBensin -= bensinYangDiperlukan;
                         cout << "Bensin truk diisi ulang di pom bensin terdekat!" << endl;
                         cout << "Sisa bensin pom bensin: " << pomBensinTerdekat->Info.stokBensin << endl;
                     } else {
@@ -580,7 +578,7 @@ void Rute_Tercepat(Graph &G, Addr_Truck truk, Addr_Vertex_Gudang pengirim, Addr_
             cout << "Sisa bensin truk: " << truk->Info.bensin << endl;
             break;
         }
-        edge = edge->NextEdge;
+        edge = NextEdge(edge);
     }
 
     // Jika rute tidak ditemukan, tawarkan untuk mencari rute alternatif
@@ -595,12 +593,12 @@ void Rute_Tercepat(Graph &G, Addr_Truck truk, Addr_Vertex_Gudang pengirim, Addr_
             // Pencarian rute alternatif (memanggil fungsi untuk mencari rute alternatif)
             edge = Rute_Alternatif(G, pengirim, penerima);
             if (edge != NULL) {
-                cout << "Rute alternatif ditemukan: " << edge->Info.nama << " dengan jarak: " << edge->Info.jarak << endl;
+                cout << "Rute alternatif ditemukan: " << Info(edge).nama << " dengan jarak: " << Info(edge).jarak << endl;
 
-                truk->Info.bensin -= edge->Info.jarak * 0.1;
-                biayaPerjalanan += edge->Info.jarak * 100;
+                Info(truk).bensin -= Info(edge).jarak * 0.1;
+                biayaPerjalanan += Info(edge).jarak * 100;
 
-                cout << "Sisa bensin truk: " << truk->Info.bensin << endl;
+                cout << "Sisa bensin truk: " << Info(truk).bensin << endl;
                 cout << "Total biaya perjalanan: " << biayaPerjalanan << endl;
             } else {
                 cout << "Tidak ada rute alternatif yang ditemukan!" << endl;
@@ -610,18 +608,13 @@ void Rute_Tercepat(Graph &G, Addr_Truck truk, Addr_Vertex_Gudang pengirim, Addr_
         }
     } else {
         // Jika rute ditemukan, transfer barang
-        pengirim->Info.barang -= jumBarang;
-        penerima->Info.barang += jumBarang;
+        Info(pengirim).barang -= jumBarang;
+        Info(penerima).barang += jumBarang;
         cout << "Total biaya perjalanan: " << biayaPerjalanan << endl;
     }
-    // Catat jalur yang sudah ditempuh
-    Catat_Jalan(G, Info(pengirim), Info(penerima), Info(edge), Info(truk));
 }
 
-
-
 // menampilkan graph dan list
-
 void Show_Graph(Graph &G) {
     cout << "<<===================================================================================>>" << endl;
     cout << "                                       GRAPH                                           " << endl;

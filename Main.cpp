@@ -304,13 +304,14 @@ int main(int argc, char** argv)
             }
 
             case 16: {
-                // Lakukan pengiriman
+                // Lakukan pengiriman dan catat jalu
                 infotype_Truck truck;
                 Infotype_Node GudangA, GudangB;
                 Infotype_Edge jalur;
-                double barang;
+                double bensin, barang, jarak, biayaPerMuatan;
 
                 cout << "Masukkan nama truk yang akan digunakan: ";
+                cin.ignore();
                 getline(cin, truck.name);
 
                 adr_Truck foundTruck = findTruck(T, truck); // Mencari truk berdasarkan nama
@@ -351,15 +352,27 @@ int main(int argc, char** argv)
                             }
 
                             foundTruck->info.kapasitas -= barang;
-                            cout << "Barang berhasil diangkut. apasitas truk: " << foundTruck->info.kapasitas << endl;
+                            cout << "Barang berhasil diangkut. Kapasitas truk: " << foundTruck->info.kapasitas << endl;
                             cout << "Memulai pengiriman.....";
 
-                            Pengiriman(T, G, pengirim, penerima, jalur, truck, 2000.00, 10.00, 50.00);
+                            cout << "Masukkan jumlah bensin: ";
+                            cin >> bensin;
+                            cout << "Masukkan jarak 2 gudang: ";
+                            cin >> jarak;
+
+                            Pengiriman(T, G, pengirim, penerima, jalur, truck, bensin, barang, jarak);
 
                             foundTruck->info.kapasitas -= barang;
                             cout << "Barang berhasil diantar. Sisa kapasitas truk: " << foundTruck->info.kapasitas << endl;
 
+                            cout << "Masukkan biaya yang diperlukan untuk sebuah perjalanan: ";
+                            cin >> biayaPerMuatan;
 
+                            double biayaPerKM = barang * jarak;
+                            cout << "Total biaya: " << biayaPengiriman(T, truck.name, biayaPerMuatan, biayaPerKM, jarak) << endl;
+
+                            // Catat jalur yang dilalui
+                            CatatJalur(G, pengirim, penerima, jalur, truck);
                         } else {
                             cout << "Gudang penerima tidak ditemukan!" << endl;
                         }
