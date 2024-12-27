@@ -371,8 +371,17 @@ int main(int argc, char** argv)
                             double biayaPerKM = barang * jarak;
                             cout << "Total biaya: " << biayaPengiriman(T, truck.name, biayaPerMuatan, biayaPerKM, jarak) << endl;
 
-                            // Catat jalur yang dilalui
-                            CatatJalur(G, pengirim, penerima, jalur, truck);
+                            cout << "Masukkan nama jalur: ";
+                            getline(cin, lajur.namaJalan);
+                            Addr_Edge Jalur = FindEdge(G, Jalur, lajur.namaJalan);
+                            if(Jalur != NULL){
+                                CatatJalur(G, pengirim, penerima, jalur, truck);
+                            }
+                            else
+                            {
+                                cout << "Jalur tidak ada!" << endl;
+                                break;
+                            }
                         } else {
                             cout << "Gudang penerima tidak ditemukan!" << endl;
                         }

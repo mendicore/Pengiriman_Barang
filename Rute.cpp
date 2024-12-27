@@ -170,28 +170,52 @@ void InsertLast_TempList(TempList& L, Addr_TempList P){
 }
 
 void InsertLast_Edge(Graph &G, Addr_Node node, Addr_Edge newEdge) {
-    if (node->FirstEdge == NULL) {
-        node->FirstEdge = newEdge;
+    if (FirstEdge(node) == NULL) {
+        FirstEdge(node) = newEdge;
     } else {
-        Addr_Edge temp = node->FirstEdge;
-        while (temp->NextEdge != NULL) {
-            temp = temp->NextEdge;
+        Addr_Edge temp = FirstEdge(node);
+        while (NextEdge(temp) != NULL) {
+            temp = NextEdge(temp);
         }
-        temp->NextEdge = newEdge;
+        NextEdge(temp) = newEdge;
     }
 }
 
-void Connecting(Graph &G, string node1, string node2, string jalan, double jarak, int waktu) {
+void InsertLast_Edge_Bensin(Graph &G, Addr_Node nodeGudang, Addr_Bensin nodePomBensin, Addr_Edge newEdge) {
+    if (nodeGudang != NULL) {
+        if (FirstEdge(nodeGudang) == NULL) {
+            FirstEdge(nodeGudang) = newEdge;
+        } else {
+            Addr_Edge temp = FirstEdge(nodeGudang);
+            while (NextEdge(temp) != NULL) {
+                temp = NextEdge(temp);
+            }
+            NextEdge(temp) = newEdge;
+        }
+    } else if (nodePomBensin != NULL) {
+        if (FirstBensin(nodePomBensin) == NULL) {
+            FirstBensin(nodePomBensin) = newEdge;
+        } else {
+            Addr_Edge temp = FirstBensin(nodePomBensin);
+            while (NextEdge(temp) != NULL) {
+                temp = NextEdge(temp);
+            }
+            NextEdge(temp) = newEdge;
+        }
+    }
+}
+
+void Connecting(Graph &G, string node1, string node2, string jalan, double jarak, int waktu, string macet) {
     Addr_Node P1 = FindNode(G, node1);
     Addr_Node P2 = FindNode(G, node2);
 
     if (P1 != NULL && P2 != NULL) {
-        if (jalan != "" && jarak > 0 && waktu > 0) {
-            Jalan JalanBaru1 = {P2->info, jalan, jarak, waktu};
+        if (jalan != "" && jarak > 0 && waktu > 0 && macet != "") {
+            Jalan JalanBaru1 = {P2->info, {}, jalan, jarak, waktu, (macet == "ya" || macet == "Ya") ? true : false};
             Addr_Edge E1 = AlokasiEdge(JalanBaru1);
             InsertLast_Edge(G, P1, E1);
 
-            Jalan JalanBaru2 = {P1->info, jalan, jarak, waktu};
+            Jalan JalanBaru2 = {P1->info, {}, jalan, jarak, waktu, (macet == "ya" || macet == "Ya") ? true : false};
             Addr_Edge E2 = AlokasiEdge(JalanBaru2);
             InsertLast_Edge(G, P2, E2);
         } else {
@@ -202,33 +226,54 @@ void Connecting(Graph &G, string node1, string node2, string jalan, double jarak
     }
 }
 
-void Connecting_Gudang_Bensin(Graph &G, string node1, string tempatBensin, string jalan, double jarak, int waktu){
+
+void Connecting_Gudang_Bensin(Graph &G, string node1, string tempatBensin, string jalan, double jarak, int waktu, string macet) {
+    Graph_Pom_Bensin GPB;
+    CreatePomBensin(GPB);
     Addr_Node P1 = FindNode(G, node1);
-    Addr_Node P2 = FindNode(G, tempatBensin);
-    if (P1 != NULL && P2 != NULL)
-    {
-        Jalan JalanBaru1 = {tempatBensin, jalan, jarak, waktu};
-        Addr_Edge E1 = AlokasiEdge(JalanBaru1);
-        InsertLast_Edge(G, P1, E1);
-        Jalan JalanBaru2 = {node1, jalan, jarak, waktu};
-        Addr_Edge E2 = AlokasiEdge(JalanBaru2);
-        InsertLast_Edge(G, P2, E2);
+    Addr_Bensin P2 = FindBensin(GPB, tempatBensin);
+
+    if (P1 != NULL && P2 != NULL) {
+        if (jalan != "" && jarak > 0 && waktu > 0 && macet != "") {
+            Jalan JalanBaru1 = {{}, P2->info, jalan, jarak, waktu, (macet == "ya" || macet == "Ya") ? true : false};
+            Addr_Edge E1 = AlokasiEdge(JalanBaru1);
+            InsertLast_Edge(G, P1, E1);
+
+            Jalan JalanBaru2 = {P1->info, {}, jalan, jarak, waktu, (macet == "ya" || macet == "Ya") ? true : false};
+            Addr_Edge E2 = AlokasiEdge(JalanBaru2);
+            InsertLast_Edge_Bensin(G, P1, P2, E2);
+        } else {
+            cout << "Data jalan tidak valid!" << endl;
+        }
+    } else {
+        cout << "Salah satu atau kedua node tidak ditemukan!" << endl;
     }
 }
 
-void Connecting_Bensin_Gudang(Graph &G, string tempatBensin, string node2, string jalan, double jarak, int waktu){
-    Addr_Node P1 = FindNode(G, tempatBensin);
+
+void Connecting_Bensin_Gudang(Graph &G, string tempatBensin, string node2, string jalan, double jarak, int waktu, string macet) {
+    Graph_Pom_Bensin GPB;
+    CreatePomBensin(GPB);
+    Addr_Bensin P1 = FindBensin(GPB, tempatBensin);
     Addr_Node P2 = FindNode(G, node2);
-    if (P1 != NULL && P2 != NULL)
-    {
-        Jalan JalanBaru1 = {node2, jalan, jarak, waktu};
-        Addr_Edge E1 = AlokasiEdge(JalanBaru1);
-        InsertLast_Edge(G, P1, E1);
-        Jalan JalanBaru2 = {tempatBensin, jalan, jarak, waktu};
-        Addr_Edge E2 = AlokasiEdge(JalanBaru2);
-        InsertLast_Edge(G, P2, E2);
+
+    if (P1 != NULL && P2 != NULL) {
+        if (jalan != "" && jarak > 0 && waktu > 0 && macet != "") {
+            Jalan JalanBaru1 = {P2->info, {}, jalan, jarak, waktu, (macet == "ya" || macet == "Ya") ? true : false};
+            Addr_Edge E1 = AlokasiEdge(JalanBaru1);
+            InsertLast_Edge_Bensin(G, P2, P1, E1);
+
+            Jalan JalanBaru2 = {{}, P1->info, jalan, jarak, waktu, (macet == "ya" || macet == "Ya") ? true : false};
+            Addr_Edge E2 = AlokasiEdge(JalanBaru2);
+            InsertLast_Edge(G, P2, E2);
+        } else {
+            cout << "Data jalan tidak valid!" << endl;
+        }
+    } else {
+        cout << "Salah satu atau kedua node tidak ditemukan!" << endl;
     }
 }
+
 
 Addr_Edge FindEdge(Graph &G, Addr_Node PNode, string data) {
     Addr_Edge P = FirstEdge(PNode);
@@ -245,12 +290,32 @@ Addr_Edge FindEdge(Graph &G, Addr_Node PNode, string data) {
     return NULL;
 }
 
+Addr_Edge FindEdge_Bensin(Graph_Pom_Bensin &GPB, Addr_Bensin PBensin, string data)
+{
+    Addr_Edge P = FirstBensin(PBensin);
+    while(P != NULL)
+    {
+        Addr_Bensin temp = Start(GPB);
+        while(temp != NULL)
+        {
+            if(info(temp).nama == data)
+            {
+                return P;
+            }
+            temp = nextBensinList(temp);
+        }
+        P = NextEdge(P);
+    }
+    return NULL;
+}
+
 string FindLastTempList(const TempList &L) {
     Addr_TempList P = L.pertama;
     while (P != nullptr && P->nextTempList != nullptr) {
         P = P->nextTempList;
     }
-    return (P ? P->info : ""); // Added null check to avoid dereferencing nullptr
+
+    return (P ? P->info : "");
 }
 
 void DeleteFirst_Bensin(Graph_Pom_Bensin &G, Addr_Bensin PBensin, Addr_Edge &P){
@@ -266,6 +331,14 @@ void DeleteFirst_Edge(Graph &G, Addr_Node PNode, Addr_Edge &P) {
     if (FirstEdge(PNode) != NULL) {
         P = FirstEdge(PNode);
         FirstEdge(PNode) = NextEdge(FirstEdge(PNode));
+        delete P;
+    }
+}
+
+void DeleteFirst_Edge_Bensin(Graph &G, Addr_Bensin PBensin, Addr_Edge &P) {
+    if (FirstBensin(PBensin) != NULL) {
+        P = FirstBensin(PBensin);
+        FirstBensin(PBensin)= NextEdge(FirstBensin(PBensin));
         delete P;
     }
 }
@@ -288,8 +361,41 @@ void DeleteLast_Edge(Graph &G, Addr_Node PNode, Addr_Edge &P) {
     }
 }
 
+void DeleteLast_Edge_Bensin(Graph &G, Addr_Bensin PBensin, Addr_Edge &P) {
+    if (FirstBensin(PBensin) != NULL) {
+        Addr_Edge temp = FirstBensin(PBensin);
+        if (NextEdge(temp) == NULL) {
+            P = temp;
+            FirstBensin(PBensin = NULL);
+            delete P;
+        } else {
+            while (NextEdge(NextEdge(temp)) != NULL) {
+                temp = NextEdge(temp);
+            }
+            P = NextEdge(temp);
+            NextEdge(temp) = NULL;
+            delete P;
+        }
+    }
+}
+
 void DeleteAfter_Edge(Graph &G, Addr_Node PNode, Addr_Edge Prec, Addr_Edge &P) {
     Addr_Edge temp = FirstEdge(PNode);
+    while (temp != NULL) {
+        if (temp == Prec) {
+            P = NextEdge(temp);
+            if (P != NULL) {
+               NextEdge(temp) = NextEdge(P);
+                delete P;
+            }
+            break;
+        }
+        temp = NextEdge(temp);
+    }
+}
+
+void DeleteAfter_Edge_Bensin(Graph &G, Addr_Bensin PBensin, Addr_Edge Prec, Addr_Edge &P) {
+    Addr_Edge temp = FirstBensin(PBensin);
     while (temp != NULL) {
         if (temp == Prec) {
             P = NextEdge(temp);
@@ -321,6 +427,39 @@ void Delete_Edge(Graph &G, Addr_Node PNode, Addr_Edge PEdge) {
 	}
 }
 
+void Delete_Edge_Gudang_PomBensin(Graph &G, Addr_Node gudang, Addr_Bensin bensin, Addr_Edge jalan) {
+    Addr_Edge Eout, prec;
+
+    // Delete edge from Gudang to Pom Bensin
+    if (jalan == FirstEdge(gudang)) {
+        DeleteFirst_Edge(G, gudang, Eout);
+    } else if (NextEdge(jalan) == NULL) {
+        DeleteLast_Edge(G, gudang, Eout);
+    } else {
+        prec = FirstEdge(gudang);
+        while (NextEdge(prec) != jalan) {
+            prec = NextEdge(prec);
+        }
+        DeleteAfter_Edge(G, gudang, prec, Eout);
+    }
+
+    // Delete edge from Pom Bensin to Gudang
+    Addr_Edge edge = FirstBensin(bensin);
+    Addr_Edge prevEdge = NULL;
+    while (edge != NULL) {
+        if (edge->info.gudang.nama == gudang->info.nama) {
+            if (prevEdge == NULL) {
+                DeleteFirst_Edge_Bensin(G, bensin, edge);
+            } else {
+                DeleteAfter_Edge_Bensin(G, bensin, prevEdge, edge);
+            }
+            break;
+        }
+        prevEdge = edge;
+        edge = NextEdge(edge);
+    }
+}
+
 void Disconnecting(Graph &G, string node1, string node2) {
     Addr_Node PNode1 = FindNode(G, node1);
     Addr_Node PNode2 = FindNode(G, node2);
@@ -338,44 +477,44 @@ void Disconnecting(Graph &G, string node1, string node2) {
     }
 }
 
-void Disconnecting_Gudang_Bensin(Graph &G, string node1, string tempatBensin)
+void Disconnecting_Gudang_Bensin(Graph &G, Graph_Pom_Bensin &GPB, string node1, string tempatBensin)
 {
     Addr_Node PNode1 = FindNode(G, node1);
-    Addr_Node PNode2 = FindNode(G, tempatBensin);
+    Addr_Bensin PNode2 = FindBensin(GPB, tempatBensin);
 
     if (PNode1 != NULL && PNode2 != NULL) {
-        Addr_Edge PEdge1 = FindEdge(G, PNode1, tempatBensin);
-        Addr_Edge PEdge2 = FindEdge(G, PNode2, node1);
+        Addr_Edge PEdge1 = FindEdge_Bensin(GPB, PNode2, tempatBensin);
+        Addr_Edge PEdge2 = FindEdge(G, PNode1, node1);
 
         if (PEdge1 != NULL) {
-            Delete_Edge(G, PNode1, PEdge1);
+            Delete_Edge_Gudang_PomBensin(G, PNode1, PNode2, PEdge1);
         }
         if (PEdge2 != NULL) {
-            Delete_Edge(G, PNode2, PEdge2);
+            Delete_Edge_Gudang_PomBensin(G, PNode1, PNode2, PEdge2);
         }
     }
 }
 
-void Disconnecting_Bensin_Gudang(Graph &G, string tempatBensin, string node2)
+void Disconnecting_Bensin_Gudang(Graph &G, Graph_Pom_Bensin &GPB, string tempatBensin, string node2)
 {
-    Addr_Node PNode1 = FindNode(G, tempatBensin);
+    Addr_Bensin PNode1 = FindBensin(GPB, tempatBensin);
     Addr_Node PNode2 = FindNode(G, node2);
 
     if (PNode1 != NULL && PNode2 != NULL) {
-        Addr_Edge PEdge1 = FindEdge(G, PNode1, node2);
-        Addr_Edge PEdge2 = FindEdge(G, PNode2, tempatBensin);
+        Addr_Edge PEdge1 = FindEdge(G, PNode2, node2);
+        Addr_Edge PEdge2 = FindEdge_Bensin(GPB, PNode1, tempatBensin);
 
         if (PEdge1 != NULL) {
-            Delete_Edge(G, PNode1, PEdge1);
+            Delete_Edge_Gudang_PomBensin(G, PNode2, PNode1, PEdge1);
         }
         if (PEdge2 != NULL) {
-            Delete_Edge(G, PNode2, PEdge2);
+            Delete_Edge_Gudang_PomBensin(G, PNode2, PNode1, PEdge2);
         }
     }
 }
 
 // Sekalian kalau butuh
-void AlJikstra(Graph G, const Infotype_Node &Mulai, const Infotype_Node &selesai, TempList T)
+void AlJikstra(Graph G, Infotype_Node Mulai, Infotype_Node selesai, TempList T)
 {
     if(Mulai.nama == selesai.nama)
     {
@@ -387,9 +526,9 @@ void AlJikstra(Graph G, const Infotype_Node &Mulai, const Infotype_Node &selesai
     Addr_Edge D = findShortestRute(G, X, T);
     if(D != Null)
     {
-        InsertLast_TempList(T, AlokasiTempList(info(D).bangunan.nama));
-        cout << "info bangunan" << info(D).bangunan.nama << endl;
-        AlJikstra(G, D->info.bangunan, selesai, T);
+        InsertLast_TempList(T, AlokasiTempList(info(D).gudang.nama));
+        cout << "info bangunan" << info(D).gudang.nama << endl;
+        AlJikstra(G, D->info.gudang, selesai, T);
     }
 }
 
@@ -421,16 +560,16 @@ void asistenJalurAlternatifDFS(Graph &G, const Infotype_Node &GudangSekarang, co
         return;
     }
 
-    for(Addr_Edge Gjalan = P->FirstEdge; Gjalan != nullptr; Gjalan = Gjalan->NextEdge)
+    for(Addr_Edge Gjalan = P->FirstEdge; Gjalan != Null; Gjalan = Gjalan->NextEdge)
     {
         bool terblokir = (Gjalan->info.namaJalan == namaJalanBlok.namaJalan);
-        bool dilewati = (telahDikunjungi(L, Gjalan->info.bangunan.nama));
+        bool dilewati = (telahDikunjungi(L, Gjalan->info.gudang.nama));
 
         if(!terblokir && !dilewati)
         {
-            InsertLast_TempList(L, AlokasiTempList(Gjalan->info.bangunan.nama));
-            cout << "Menuju jalan " << Gjalan->info.namaJalan << " menuju gudang " << Gjalan->info.bangunan.nama << " memakan waktu " << Gjalan->info.waktu << endl;
-            asistenJalurAlternatifDFS(G, Gjalan->info.bangunan, GudangTujuan, WaktuSekarang + Gjalan->info.waktu, WaktuMinimal, L, jalanTerbaik, namaJalanBlok);
+            InsertLast_TempList(L, AlokasiTempList(Gjalan->info.gudang.nama));
+            cout << "Menuju jalan " << Gjalan->info.namaJalan << " menuju gudang " << Gjalan->info.gudang.nama << " memakan waktu " << Gjalan->info.waktu << endl;
+            asistenJalurAlternatifDFS(G, Gjalan->info.gudang, GudangTujuan, WaktuSekarang + Gjalan->info.waktu, WaktuMinimal, L, jalanTerbaik, namaJalanBlok);
             Delete_Templist(L);
             cout << "Kembali ke kota " << FindLastTempList(L) << endl;
         }
@@ -462,7 +601,7 @@ void jalurAlternatifDFS(Graph &G, const Infotype_Node &awalGudang, const Infotyp
 
         cout << "Waktu tercepat: ";
         bool cetakPertama = true;
-        for(Addr_TempList P = jalurTerbaik.pertama; P != Null; P = P->nextTempList)
+        for(Addr_TempList P = jalurTerbaik.pertama; P != nullptr; P = P->nextTempList)
         {
             if(!cetakPertama)
             {
@@ -479,9 +618,9 @@ Addr_Edge findShortestRute(Graph G, Addr_Node AG, TempList AT)
 {
     Addr_Edge E = FirstEdge(AG);
     Addr_Edge terpendek = E;
-    while(E != Null)
+    while(E != nullptr)
     {
-        if(info(E).waktu < info(terpendek).waktu && !telahDikunjungi(AT, E->info.bangunan.nama))
+        if(info(E).waktu < info(terpendek).waktu && !telahDikunjungi(AT, E->info.gudang.nama))
         {
             terpendek = E;
         }
@@ -492,7 +631,7 @@ Addr_Edge findShortestRute(Graph G, Addr_Node AG, TempList AT)
 
 bool telahDikunjungi(TempList AT, string Gudang)
 {
-    for(Addr_TempList R = AT.pertama; R != Null; R = nextTempList(R))
+    for(Addr_TempList R = AT.pertama; R != nullptr; R = nextTempList(R))
     {
         if(info(R) == Gudang)
         {
@@ -517,9 +656,11 @@ void ShowAllGudangJalur(Graph &G) {
             cout << "<<----------------------------------------------------------------------------------->>" << endl;
 
             for (Addr_Edge E = N->FirstEdge; E != Null; E = E->NextEdge) {
-                cout << left << setw(15) << info(E).bangunan.nama
+                cout << left << setw(15) << info(E).gudang.nama
+                     << setw(20) << info(E).pomBensin.nama
                      << setw(20) << info(E).namaJalan
                      << setw(10) << info(E).jarak
+                     << setw(20) << info(E).macet
                      << setw(15) << info(E).waktu
                      << endl;
             }
@@ -584,7 +725,7 @@ void showPeta(Graph &G, Graph_Pom_Bensin &GPB) {
 
 void ShowTempList(TempList L)
 {
-    for(Addr_TempList P = L.pertama; P != nullptr; P = P->nextTempList)
+    for(Addr_TempList P = L.pertama; P != Null; P = P->nextTempList)
     {
         cout << P->info << " ";
     }
@@ -603,7 +744,7 @@ void Delete_Templist(TempList &L)
     if(P->nextTempList == nullptr)
     {
         delete P;
-        L.pertama = nullptr;
+        L.pertama = Null;
         return;
     }
 

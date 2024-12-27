@@ -32,7 +32,7 @@ typedef struct {
 
 void CreateTruck(TruckList &T);
 adr_Truck Alokasi(infotype_Truck x);
-void addTruck(TruckList &T, infotype_Truck x);
+void addTruck(TruckList &T, adr_Truck x);
 void AddMuatan(TruckList &T, string name, int muatan);
 void deleteMuatan(TruckList &T, string name, int muatan);
 void deleteTruck(TruckList &T, string name);

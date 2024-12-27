@@ -13,12 +13,11 @@ adr_Truck Alokasi(infotype_Truck x) {
     return P;
 }
 
-void addTruck(TruckList &T, infotype_Truck x){
-    adr_Truck P = Alokasi(x);
-    if (P != NULL)
+void addTruck(TruckList &T, adr_Truck x){
+    if (x != NULL)
     {
-        next(P) = first(T);
-        first(T) = P;
+        next(x) = first(T);
+        first(T) = x;
     }
 }
 
@@ -125,7 +124,7 @@ double biayaPengiriman(TruckList &T, string name, double biayaPerMuatan, double 
 }
 
 double KapasitasMaksimal(TruckList &T, string name){
-    for (adr_Truck P = first(T); P != NULL; P = next(P))
+    for (adr_Truck P = first(T); P != nullptr; P = next(P))
     {
         if (info(P).name == name)
         {
@@ -137,7 +136,7 @@ double KapasitasMaksimal(TruckList &T, string name){
 }
 
 double BensinperKapasitas(TruckList &T, string name, double bensin, double muatan, double jarak){
-    for (adr_Truck P = first(T); P != NULL; P = next(P))
+    for (adr_Truck P = first(T); P != nullptr; P = next(P))
     {
         if (info(P).name == name)
         {
@@ -180,7 +179,7 @@ bool ApakahMacetatauHambatan(Graph &G, const Infotype_Node &gudang, const Infoty
     {
         for (Addr_Edge P = FirstEdge(node); P != NULL; P = NextEdge(P))
         {
-            if (P->info.namaJalan == jalur.namaJalan)
+            if (info(P).namaJalan == jalur.namaJalan)
             {
                 int count = 0;
                 for (Addr_Node Q = Start(G); Q != NULL; Q = NextNode(Q))
@@ -201,7 +200,7 @@ bool ApakahMacetatauHambatan(Graph &G, const Infotype_Node &gudang, const Infoty
 void CatatJalur(Graph &G, const Infotype_Node &gudangA, const Infotype_Node &GudangB, const Infotype_Edge &jalur, const infotype_Truck &truk) {
     Addr_Node nodeA = FindNode(G, gudangA.nama);
     Addr_Node nodeB = FindNode(G, GudangB.nama);
-    if (nodeA != NULL && nodeB != NULL && !Info(nodeA).nama.empty() && !Info(nodeB).nama.empty()) {
+    if (nodeA != NULL && nodeB != NULL && ! info(nodeA).nama.empty() && ! info(nodeB).nama.empty()) {
         Addr_Edge newEdge1 = AlokasiEdge({jalur.namaJalan, 0, 0});
         if (newEdge1 != NULL) {
             NextEdge(newEdge1) = FirstEdge(nodeA);
@@ -242,7 +241,7 @@ string JalurAlternatif(Graph &G, string gudang, string jalur){
 */
 
 void Pengiriman(TruckList &T, Graph &G, const Infotype_Node &gudangA, const Infotype_Node &gudangB, const Infotype_Edge &jalur, const infotype_Truck &truk, double bensin, double muatan, double jarak){
-    if (ApakahMacetatauHambatan(G, gudangA, jalur) || ApakahMacetatauHambatan(G, gudangB, jalur))
+    if (ApakahMacetatauHambatan(G, gudangA, jalur) || ApakahMacetatauHambatan(G, gudangB, jalur) || jalur.macet == true)
     {
         TempList jalurAlternatif;
         CreateTempList(jalurAlternatif);

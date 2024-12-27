@@ -14,6 +14,8 @@ using namespace std;
 #define FirstEdge(P) 	(P)->FirstEdge
 #define FirstBensin(P) (P)->FirstBensin
 #define Start(G) 		(G).Start
+#define first(L) (L).first
+#define next(P) (P)->next
 #define Null NULL
 
 typedef struct vElmt Elmt_Node;
@@ -24,6 +26,7 @@ typedef Elmt_Node* Addr_Node;
 typedef Elmt_Edge* Addr_Edge;
 typedef Elmt_TempList* Addr_TempList;
 typedef Elmt_Bensin* Addr_Bensin;
+typedef struct t_elm_Truck* adr_Truck; //Dari dan ke Truck.h
 
 typedef struct{
    string nama;
@@ -45,10 +48,12 @@ typedef struct
 
 typedef struct
 {
-    Gudang bangunan;
+    Gudang gudang;
+    PomBensin pomBensin;
     string namaJalan;
     double jarak;
     int waktu;
+    bool macet;
 } Jalan;
 
 typedef string Infotype_TempList;
@@ -114,20 +119,26 @@ Addr_Node FindNode(Graph G, string data);
 Addr_Bensin FindBensin(Graph_Pom_Bensin GPB, string data);
 void InsertLast_TempList(TempList& L, Addr_TempList P);
 void InsertLast_Edge(Graph &G, Addr_Node PNode, Addr_Edge PEdge);
-void Connecting(Graph &G, string node1, string node2, string jalan, double jarak, int waktu);
-void Connecting_Gudang_Bensin(Graph &G, string node1, string tempatBensin, string jalan, double jarak, int waktu);
-void Connecting_Bensin_Gudang(Graph &G, string tempatBensin, string node2, string jalan, double jarak, int waktu);
+void InsertLast_Edge_Bensin(Graph &G, Addr_Node nodeGudang, Addr_Bensin nodePomBensin, Addr_Edge newEdge);
+void Connecting(Graph &G, string node1, string node2, string jalan, double jarak, int waktu, string macet);
+void Connecting_Gudang_Bensin(Graph &G, string node1, string tempatBensin, string jalan, double jarak, int waktu, string macet);
+void Connecting_Bensin_Gudang(Graph &G, string tempatBensin, string node2, string jalan, double jarak, int waktu, string macet);
 Addr_Edge FindEdge(Graph &G, Addr_Node PNode, string data);
+Addr_Edge FindEdge_Bensin(Graph& G, Addr_Bensin PBensin, string data);
 string FindLastTempList(const TempList &L);
 void DeleteFirst_Bensin(Graph_Pom_Bensin &G, Addr_Bensin PBensin, Addr_Edge &P);
 void DeleteFirst_Edge(Graph &G, Addr_Node PNode, Addr_Edge &P);
+void DeleteFirst_Edge_Bensin(Graph &G, Addr_Bensin PBensin, Addr_Edge &P);
 void DeleteLast_Edge(Graph &G, Addr_Node PNode, Addr_Edge &P);
+void DeleteLast_Edge_Bensin(Graph &G, Addr_Bensin PBensin, Addr_Edge &P);
 void DeleteAfter_Edge(Graph &G, Addr_Node PNode, Addr_Edge Prec, Addr_Edge &P);
+void DeleteAfter_Edge_Bensin(Graph &G, Addr_Bensin PBensin, Addr_Edge Prec, Addr_Edge &P);
 void Delete_Edge(Graph &G, Addr_Node PNode, Addr_Edge PEdge);
+void Delete_Edge_Gudang_PomBensin(Graph &G, Addr_Node gudang, Addr_Bensin bensin, Addr_Edge jalan);
 void Disconnecting(Graph &G, string node1, string node2);
-void Disconnecting_Gudang_Bensin(Graph &G, string node1, string tempatBensin);
-void Disconnecting_Bensin_Gudang(Graph &G, string tempatBensin, string node2);
-void AlJikstra(Graph G, const Infotype_Node &Mulai, const Infotype_Node &selesai, TempList T);
+void Disconnecting_Gudang_Bensin(Graph &G, Graph_Pom_Bensin &GPB, string node1, string tempatBensin);
+void Disconnecting_Bensin_Gudang(Graph &G, Graph_Pom_Bensin &GPB, string tempatBensin, string node2);
+void AlJikstra(Graph G, Infotype_Node Mulai, Infotype_Node selesai, TempList T);
 void catatTempList(const TempList &asal, TempList &tujuan);
 void asistenJalurAlternatifDFS(Graph &G, const Infotype_Node &GudangSekarang, const Infotype_Node &GudangTujuan, int WaktuSekarang, int &WaktuMinimal, TempList &L, TempList &jalanTerbaik, const Infotype_Edge &namaJalanBlok);
 void jalurAlternatifDFS(Graph &G, const Infotype_Node &awalGudang, const Infotype_Node &tujuanGudang, const Infotype_Edge &namaJalanBlok);
