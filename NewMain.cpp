@@ -8,146 +8,61 @@ int main(int argc, char** argv)
     Create_Graph(G);
     Create_Truck(T);
 
-    Infotype_Gudang gudang1, gudang2, gudang3, gudang4, gudang5, gudang6, gudang7, gudang8, gudang9, gudang10;
+    Infotype_Gudang gudangs[10] = {
+        {"Makmur", "Jakarta", 5000, 4200},
+        {"Sentosa", "Surabaya", 7000, 6700},
+        {"Sejahtera", "Bandung", 6000, 5100},
+        {"Mandiri", "Semarang", 8000, 6900},
+        {"Surya", "Medan", 5500, 4800},
+        {"Cemerlang", "Yogyakarta", 4500, 3900},
+        {"Emas", "Bali", 6500, 6200},
+        {"Sehat", "Surabaya", 5500, 4700},
+        {"Otomotif", "Jakarta", 7000, 6300},
+        {"Bagus", "Bekasi", 8000, 7200}
+    };
 
-    // Gudang 1
-    gudang1.nama = "Makmur";
-    gudang1.lokasi = "Jakarta";
-    gudang1.kapasitas = 5000;
-    gudang1.barang = 4200;
-    Addr_Vertex_Gudang newGudang1 = Alokasi_Gudang(gudang1);
-    Add_Vertex_Gudang(G, newGudang1);
+    for (int i = 0; i < 10; ++i) {
+        Addr_Vertex newGudang = Alokasi_Vertex("Gudang", gudangs[i], {});
+        Add_Vertex(G, newGudang, "Gudang");
+    }
 
-    // Gudang 2
-    gudang2.nama = "Sentosa";
-    gudang2.lokasi = "Surabaya";
-    gudang2.kapasitas = 7000;
-    gudang2.barang = 6700;
-    Addr_Vertex_Gudang newGudang2 = Alokasi_Gudang(gudang2);
-    Add_Vertex_Gudang(G, newGudang2);
+    Infotype_PomBensin pombensins[3] = {
+        {"Pertamina", "Cibubur", 15000},
+        {"Shell", "Cibubur", 12000},
+        {"Total", "Bandung", 10000}
+    };
 
-    // Gudang 3
-    gudang3.nama = "Sejahtera";
-    gudang3.lokasi = "Bandung";
-    gudang3.kapasitas = 6000;
-    gudang3.barang = 5100;
-    Addr_Vertex_Gudang newGudang3 = Alokasi_Gudang(gudang3);
-    Add_Vertex_Gudang(G, newGudang3);
-
-    // Gudang 4
-    gudang4.nama = "Mandiri";
-    gudang4.lokasi = "Semarang";
-    gudang4.kapasitas = 8000;
-    gudang4.barang = 6900;
-    Addr_Vertex_Gudang newGudang4 = Alokasi_Gudang(gudang4);
-    Add_Vertex_Gudang(G, newGudang4);
-
-    // Gudang 5
-    gudang5.nama = "Surya";
-    gudang5.lokasi = "Medan";
-    gudang5.kapasitas = 5500;
-    gudang5.barang = 4800;
-    Addr_Vertex_Gudang newGudang5 = Alokasi_Gudang(gudang5);
-    Add_Vertex_Gudang(G, newGudang5);
-
-    // Gudang 6
-    gudang6.nama = "Cemerlang";
-    gudang6.lokasi = "Yogyakarta";
-    gudang6.kapasitas = 4500;
-    gudang6.barang = 3900;
-    Addr_Vertex_Gudang newGudang6 = Alokasi_Gudang(gudang6);
-    Add_Vertex_Gudang(G, newGudang6);
-
-    // Gudang 7
-    gudang7.nama = "Emas";
-    gudang7.lokasi = "Bali";
-    gudang7.kapasitas = 6500;
-    gudang7.barang = 6200;
-    Addr_Vertex_Gudang newGudang7 = Alokasi_Gudang(gudang7);
-    Add_Vertex_Gudang(G, newGudang7);
-
-    // Gudang 8
-    gudang8.nama = "Sehat";
-    gudang8.lokasi = "Surabaya";
-    gudang8.kapasitas = 5500;
-    gudang8.barang = 4700;
-    Addr_Vertex_Gudang newGudang8 = Alokasi_Gudang(gudang8);
-    Add_Vertex_Gudang(G, newGudang8);
-
-    // Gudang 9
-    gudang9.nama = "Otomotif";
-    gudang9.lokasi = "Jakarta";
-    gudang9.kapasitas = 7000;
-    gudang9.barang = 6300;
-    Addr_Vertex_Gudang newGudang9 = Alokasi_Gudang(gudang9);
-    Add_Vertex_Gudang(G, newGudang9);
-
-    // Gudang 10
-    gudang10.nama = "Bagus";
-    gudang10.lokasi = "Bekasi";
-    gudang10.kapasitas = 8000;
-    gudang10.barang = 7200;
-    Addr_Vertex_Gudang newGudang10 = Alokasi_Gudang(gudang10);
-    Add_Vertex_Gudang(G, newGudang10);
-
-    Infotype_PomBensin pombensin1, pombensin2, pombensin3;
-
-    // Pom Bensin 1
-    pombensin1.nama = "Pertamina";
-    pombensin1.stokBensin = 15000;
-    pombensin1.lokasi = "Cibubur";
-    Addr_Vertex_PomBensin newPomBensin1 = Alokasi_PomBensin(pombensin1);
-    Add_Vertex_PomBensin(G, newPomBensin1);
-
-    // Pom Bensin 2
-    pombensin2.nama = "Shell";
-    pombensin2.stokBensin = 12000;
-    pombensin2.lokasi = "Bogor";
-    Addr_Vertex_PomBensin newPomBensin2 = Alokasi_PomBensin(pombensin2);
-    Add_Vertex_PomBensin(G, newPomBensin2);
-
-    // Pom Bensin 3
-    pombensin3.nama = "Total";
-    pombensin3.stokBensin = 10000;
-    pombensin3.lokasi = "Bandung";
-    Addr_Vertex_PomBensin newPomBensin3 = Alokasi_PomBensin(pombensin3);
-    Add_Vertex_PomBensin(G, newPomBensin3);
+     for (int i = 0; i < 3; ++i) {
+        Addr_Vertex newPomBensin = Alokasi_Vertex("PomBensin", {}, pombensins[i]);
+        Add_Vertex(G, newPomBensin, "PomBensin");
+    }
 
 
-    Infotype_Truck truck1, truck2;
+    Infotype_Truck trucks[2] = {
+        {"Vortex", 8000, 0, 150},
+        {"Titan", 10000, 0,  120}
+    };
 
-    // Truck 1
-    truck1.nama = "Vortex";
-    truck1.kapasitas = 8000;
-    truck1.muatan = 0;
-    truck1.bensin = 150;
-    Addr_Truck newTruck1 = Alokasi_Truck(truck1);
-    Add_Truck(T, newTruck1);
+     for (int i = 0; i < 2; ++i) {
+        Addr_Truck newTruck = Alokasi_Truck(trucks[i]);
+        Add_Truck(T, newTruck);
+    }
 
-    // Truck 2
-    truck2.nama = "Titan";
-    truck2.kapasitas = 10000;
-    truck2.muatan = 0;
-    truck2.bensin = 120;
-    Addr_Truck newTruck2 = Alokasi_Truck(truck2);
-    Add_Truck(T, newTruck2);
-
-
-    Connecting_Gudang(G, "Makmur", "Sejahtera", "Jalan Merpati Raya", 3.5, "tidak");
-    Connecting_Gudang(G, "Sejahtera", "Mandiri", "Jalan Pahlawan", 1.2, "ya");
+    Connecting_Vertex(G, "Makmur", "Sejahtera", "Jalan Merpati Raya", 3.5, "tidak");
+    Connecting_Vertex(G, "Sejahtera", "Mandiri", "Jalan Pahlawan", 1.2, "ya");
     Connecting_Gudang_To_PomBensin(G, "Makmur", "Total", "Jalan Bunga Melati", 4.7, "tidak");
     Connecting_PomBensin_To_Gudang(G, "Total", "Surya", "Jalan Cendrawasih", 2.3, "tidak");
-    Connecting_Gudang(G, "Surya", "Mandiri", "Jalan Mutiara Biru", 5.1, "tidak");
-    Connecting_Gudang(G, "Mandiri", "Emas", "Jalan Damarwulan ", 6, "tidak");
-    Connecting_Gudang(G, "Mandiri", "Cemerlang", "Jalan Seroja ", 2.8, "tidak");
+    Connecting_Vertex(G, "Surya", "Mandiri", "Jalan Mutiara Biru", 5.1, "tidak");
+    Connecting_Vertex(G, "Mandiri", "Emas", "Jalan Damarwulan ", 6, "tidak");
+    Connecting_Vertex(G, "Mandiri", "Cemerlang", "Jalan Seroja ", 2.8, "tidak");
     Connecting_Gudang_To_PomBensin(G, "Cemerlang", "Pertamina", "Jalan Kenanga", 3.9, "ya");
     Connecting_PomBensin_To_Gudang(G, "Pertamina", "Emas", "Jalan Taman Sari ", 1.6, "tidak");
     Connecting_PomBensin_To_Gudang(G, "Pertamina", "Sehat", "Jalan Gunung Bromo ", 7.4, "tidak");
-    Connecting_Gudang(G, "Emas", "Otomotif", "Jalan Surya Kencana", 4.2, "tidak");
-    Connecting_Gudang(G, "Emas", "Bagus", "Jalan Bintang Laut", 3, "ya");
-    Connecting_Gudang(G, "Sehat", "Otomotif", "Jalan Cipta Karya ", 2.5, "tidak");
-    Connecting_Gudang(G, "Bagus", "Otomotif", "Jalan Alam Raya ", 5.6, "tidak");
-    Connecting_Gudang(G, "Bagus", "Sentosa", "Jalan Puspa Indah ", 6.8, "tidak");
+    Connecting_Vertex(G, "Emas", "Otomotif", "Jalan Surya Kencana", 4.2, "tidak");
+    Connecting_Vertex(G, "Emas", "Bagus", "Jalan Bintang Laut", 3, "ya");
+    Connecting_Vertex(G, "Sehat", "Otomotif", "Jalan Cipta Karya ", 2.5, "tidak");
+    Connecting_Vertex(G, "Bagus", "Otomotif", "Jalan Alam Raya ", 5.6, "tidak");
+    Connecting_Vertex(G, "Bagus", "Sentosa", "Jalan Puspa Indah ", 6.8, "tidak");
     Connecting_Gudang_To_PomBensin(G, "Otomotif", "Shell", "Jalan Pahlawan Tani", 4.3, "tidak");
     Connecting_PomBensin_To_Gudang(G, "Shell", "Sentosa", "Jalan Cempaka Putih  ", 2.9, "tidak");
 
@@ -201,10 +116,8 @@ int main(int argc, char** argv)
                 if(gudang.kapasitas <= gudang.barang){
                     cout << "Jumlah barang tidak bisa melebihi kapasitas gudang!" << endl;
                 }
-                Addr_Vertex_Gudang newGudang = Alokasi_Gudang(gudang);
-                Add_Vertex_Gudang(G, newGudang);
-
-                cout << "\n Gudang " << gudang.nama << " berhasil ditambahkan!" << endl;
+                Addr_Vertex newGudang = Alokasi_Vertex("Gudang", gudang, {});
+                Add_Vertex(G, newGudang, "Gudang");
                 break;
             }
 
@@ -213,9 +126,9 @@ int main(int argc, char** argv)
                 cout << endl << "Masukkan nama Gudang yang ingin dihapus: ";
                 cin.ignore();
                 getline(cin, warehouse1);
-                Addr_Vertex_Gudang delGudang = Find_Vertex_Gudang(G, warehouse1);
+                Addr_Vertex delGudang = Find_Vertex(G, warehouse1, "Gudang");
                  if (delGudang != NULL) {
-                    Delete_Vertex_Gudang(G, delGudang);
+                    Delete_Vertex(G, delGudang, "Gudang");
                     cout << "Gudang " << warehouse1 << " berhasil dihapus!" << endl << endl;
                 } else {
                     cout << "Gudang dengan nama " << warehouse1 << " tidak ditemukan!" << endl << endl;
@@ -233,9 +146,8 @@ int main(int argc, char** argv)
                 getline(cin, pombensin.lokasi);
                 cout << endl << "Masukkan stok bahan bakar: ";
                 cin >> pombensin.stokBensin;
-                Addr_Vertex_PomBensin newPomBensin = Alokasi_PomBensin(pombensin);
-                Add_Vertex_PomBensin(G, newPomBensin);
-                cout << "Pom bensin " << pombensin.nama << " berhasil ditambahkan!" << endl << endl;
+                Addr_Vertex newPomBensin = Alokasi_Vertex("PomBensin", {}, pombensin);
+                Add_Vertex(G, newPomBensin, "PomBensin");
                 break;
             }
 
@@ -244,9 +156,9 @@ int main(int argc, char** argv)
                 cout << endl << "Masukkan nama Pom Bensin yang ingin dihapus: ";
                 cin.ignore();
                 getline(cin, station);
-                Addr_Vertex_PomBensin stationToDelete = Find_Vertex_PomBensin(G, station);
+                Addr_Vertex stationToDelete = Find_Vertex(G, station, "PomBensin");
                 if (stationToDelete != NULL) {
-                    Delete_Vertex_PomBensin(G, stationToDelete);
+                    Delete_Vertex(G, stationToDelete, "PomBensin");
                     cout << "Pom Bensin " << station << " berhasil dihapus!" << endl << endl;
                 } else {
                     cout << "Pom Bensin dengan nama " << station << " tidak ditemukan!" << endl << endl;
@@ -268,7 +180,6 @@ int main(int argc, char** argv)
                 truck.muatan = 0;
                 Addr_Truck newTruck = Alokasi_Truck(truck);
                 Add_Truck(T, newTruck);
-                cout << "Truck " << truck.nama << " berhasil ditambahkan!" << endl << endl;
                 break;
             }
 
@@ -299,8 +210,9 @@ int main(int argc, char** argv)
                 cout << "Masukkan jarak antar Gudang: ";
                 cin >> jarak;
                 cout << "Apakah jalan macet? (ya/tidak) ";
+                cin.ignore();
                 getline(cin, macet);
-                Connecting_Gudang(G, warehouse1, warehouse2, rute, jarak, macet);
+                Connecting_Vertex(G, warehouse1, warehouse2, rute, jarak, macet);
                 cout << "Gudang " << warehouse1 << " dan " << warehouse2 << " berhasil dihubungkan!" << endl << endl;
                 break;
             }
@@ -313,11 +225,11 @@ int main(int argc, char** argv)
                 cout << "Masukkan nama Gudang kedua: ";
                 getline(cin, warehouse2);
 
-                Addr_Vertex_Gudang disconnect1 = Find_Vertex_Gudang(G, warehouse1);
-                Addr_Vertex_Gudang disconnect2 = Find_Vertex_Gudang(G, warehouse2);
+                Addr_Vertex disconnect1 = Find_Vertex(G, warehouse1, "Gudang");
+                Addr_Vertex disconnect2 = Find_Vertex(G, warehouse2, "Gudang");
 
                 if (disconnect1 != NULL && disconnect2 != NULL) {
-                    Disconnecting_Gudang(G, warehouse1, warehouse2);
+                    Disconnecting_Vertex(G, warehouse1, warehouse2);
                     cout << "Rute antara Gudang " << warehouse1 << " dan " << warehouse2 << " berhasil dihapus!" << endl << endl;
                 } else {
                     cout << "Salah satu atau kedua Gudang tidak ditemukan!" << endl << endl;
@@ -337,6 +249,7 @@ int main(int argc, char** argv)
                 cout << "Masukkan jarak Gudang dan Pom Bensin: ";
                 cin >> jarak;
                 cout << "Apakah jalan macet? (ya/tidak) ";
+                cin.ignore();
                 getline(cin, macet);
                 Connecting_Gudang_To_PomBensin(G, warehouse1, station, rute, jarak, macet);
                 cout << "Gudang " << warehouse1 << " dan Pom Bensin " << station << " berhasil dihubungkan!" << endl << endl;
@@ -355,6 +268,7 @@ int main(int argc, char** argv)
                 cout << "Masukkan jarak Gudang dan Pom Bensin: ";
                 cin >> jarak;
                 cout << "Apakah jalan macet? (ya/tidak) ";
+                cin.ignore();
                 getline(cin, macet);
                 Connecting_PomBensin_To_Gudang(G, warehouse1, station, rute, jarak, macet);
                 cout << "Pom Bensin " << station << " Gudang " << warehouse1 << " berhasil dihubungkan!" << endl << endl;
@@ -369,8 +283,8 @@ int main(int argc, char** argv)
                 cout << "Masukkan nama Pom bensin: ";
                 getline(cin, station);
 
-                Addr_Vertex_Gudang disconnect1 = Find_Vertex_Gudang(G, warehouse1);
-                Addr_Vertex_PomBensin disconnect2 = Find_Vertex_PomBensin(G, station);
+                Addr_Vertex disconnect1 = Find_Vertex(G, warehouse1, "Gudang");
+                Addr_Vertex disconnect2 = Find_Vertex(G, station, "PomBensin");
 
                 if (disconnect1 != NULL && disconnect2 != NULL) {
                     Disconnecting_Gudang_PomBensin(G, warehouse1, station);
@@ -389,8 +303,8 @@ int main(int argc, char** argv)
                 cout << "Masukkan nama Gudang: ";
                 getline(cin, warehouse1);
 
-                Addr_Vertex_PomBensin disconnect1 = Find_Vertex_PomBensin(G, station);
-                Addr_Vertex_Gudang disconnect2 = Find_Vertex_Gudang(G, warehouse1);
+                Addr_Vertex disconnect1 = Find_Vertex(G, station, "PomBensin");
+                Addr_Vertex disconnect2 = Find_Vertex(G, warehouse1, "Gudang");
 
                 if (disconnect1 != NULL && disconnect2 != NULL) {
                     Disconnecting_PomBensin_Gudang(G, station, warehouse1);
@@ -424,14 +338,14 @@ int main(int argc, char** argv)
                     if(truk->Info.bensin >= 0) {
                         cout << "Masukan nama gudang pengirim: ";
                         getline(cin, warehouse1);
-                        Addr_Vertex_Gudang foundPengirim = Find_Vertex_Gudang(G, warehouse1);
+                        Addr_Vertex foundPengirim = Find_Vertex(G, warehouse1, "Gudang");
                         if (foundPengirim != NULL) {
-                            if (foundPengirim->Info.barang != 0) {
+                            if (foundPengirim->gudang.barang != 0) {
                                 cout << "Masukan nama gudang penerima: ";
                                 getline(cin, warehouse2);
-                                Addr_Vertex_Gudang foundPenerima = Find_Vertex_Gudang(G, warehouse2);
+                                Addr_Vertex foundPenerima = Find_Vertex(G, warehouse2, "Gudang");
                                 if(foundPenerima != NULL) {
-                                    Infotype_Gudang pengirim = foundPengirim->Info;
+                                    Infotype_Gudang pengirim = foundPengirim->gudang;
                                     // Menampilkan informasi gudang pengirim
                                     cout << endl << "Informasi Gudang pengirim " << pengirim.nama << endl;
                                     cout << "Lokasi                     : " << pengirim.lokasi << endl;
@@ -439,7 +353,7 @@ int main(int argc, char** argv)
                                     cout << "Jumlah Barang di Gudang    : " << pengirim.barang << endl << endl;
 
                                     // Menampilkan informasi gudang penerima
-                                    Infotype_Gudang penerima = foundPenerima->Info;
+                                    Infotype_Gudang penerima = foundPenerima->gudang;
                                     cout << endl << "Informasi Gudang penerima " << penerima.nama << endl;
                                     cout << "Lokasi                     : " << penerima.lokasi << endl;
                                     cout << "Kapasitas Gudang           : " << penerima.kapasitas << endl;
@@ -452,6 +366,7 @@ int main(int argc, char** argv)
                                         cout << "Pengiriman akan dilakukan dari Gudang " << pengirim.nama << " ke Gudang " << penerima.nama << endl;
                                         cout << "Jumlah barang yang akan dikirim: " << jumBarang << endl;
                                         Rute_Tercepat(G, truk, foundPengirim, foundPenerima, jumBarang); // Perbaikan titik koma
+                                        break;
                                     } else {
                                         cout << "Tidak dapat mengangkut barang!" << endl;
                                         break;
