@@ -1,19 +1,23 @@
 #include "Truck.h"
 
-void CreateTruck(TruckList &T){
+void CreateTruck(TruckList &T)
+{
     first(T) = NULL;
 }
 
-adr_Truck Alokasi(infotype_Truck x) {
+adr_Truck Alokasi(infotype_Truck x)
+{
     adr_Truck P = new elm_Truck;
-    if (P != NULL) {
-        P->info = x;
-        P->next = NULL;
+    if (P != NULL)
+    {
+        info(P) = x;
+        next(P) = NULL;
     }
     return P;
 }
 
-void addTruck(TruckList &T, adr_Truck x){
+void addTruck(TruckList &T, adr_Truck x)
+{
     if (x != NULL)
     {
         next(x) = first(T);
@@ -35,7 +39,8 @@ void AddMuatan(TruckList &T, string name, int muatan)
     cout << "Truck dengan nama " << name << " tidak ditemukan!" << endl;
 }
 
-void deleteMuatan(TruckList &T, string name, int muatan){
+void deleteMuatan(TruckList &T, string name, int muatan)
+{
     for(adr_Truck P = first(T); P != NULL; P = next(P))
     {
         if (info(P).name == name)
@@ -55,14 +60,15 @@ void deleteMuatan(TruckList &T, string name, int muatan){
     cout << "Truck dengan nama " << name << " tidak ditemukan!" << endl;
 }
 
-void deleteTruck(TruckList &T, string name){
-    adr_Truck P = first(T), prev = NULL;
+void deleteTruck(TruckList &T, string name, adr_Truck &P)
+{
+    adr_Truck prev = NULL;
 
-    if (P != NULL && P->info.name == name)
+    if (P != NULL && info(P).name == name)
     {
         first(T) = next(P);
         delete P;
-        cout << "Truck dengan nama " << name << " telah dihapus." << endl;
+        cout << "Truck dengan nama " << name << "telah dihapus." << endl;
         return;
     }
 
@@ -74,43 +80,41 @@ void deleteTruck(TruckList &T, string name){
 
     if (P == NULL)
     {
-        cout << "Truck dengan nama " << name << " tidak ditemukan!" << endl;
+        cout << "Truck dengan nama " << name << "tidak ditemukan!" << endl;
         return;
     }
 
     next(prev) = next(P);
     delete P;
-    cout << "Truck dengan nama " << name << " telah dihapus." << endl;
+    cout << "Truck dengan nama " << name << "telah dihapus." << endl;
 }
 
-adr_Truck findTruck(TruckList &T, infotype_Truck x){
-    adr_Truck P = first(T);
-    while (P != NULL)
+adr_Truck findTruck(TruckList &T, infotype_Truck x)
+{
+    for(adr_Truck P = first(T); P != NULL; P = next(P))
     {
         // Compare the 'name' member of the Truck with x.name
         if (info(P).name == x.name)
         {
             return P;
         }
-        P = next(P);
     }
-    return Null;
+    return NULL;
 }
 
-
-void showTrucks(TruckList &T) {
-    adr_Truck P = first(T);
+void showTrucks(TruckList &T)
+{
     cout << "<<==================================================================>>" << endl;
-    while (P != NULL) {
-        cout <<"[Nama] " << P->info.name << "\t[Roda} " << P->info.jumlahRoda << "\t[Max Barang] " <<  P->info.kapasitas <<
-        "\t\t[Max Bensin] " << P->info.bensin << endl;
-        P = P->next;
+    for(adr_Truck P = first(T); P != NULL; P = next(P))
+    {
+        cout << left << setw(20) << "[Nama] " << info(P).name << setw(10) << "[Roda} " << info(P).jumlahRoda << setw(10) <<"[Max Barang] " <<  info(P).kapasitas <<
+        setw(20) << "[Max Bensin] " << info(P).bensin << endl;
     }
     cout << "<<==================================================================>>" << endl << endl;
-
 }
 
-double biayaPengiriman(TruckList &T, string name, double biayaPerMuatan, double biayaPerKm, double jarak){
+double biayaPengiriman(TruckList &T, string name, double biayaPerMuatan, double biayaPerKm, double jarak)
+{
     for(adr_Truck P = first(T); P != NULL; P = next(P))
     {
         if (info(P).name == name)
@@ -123,7 +127,8 @@ double biayaPengiriman(TruckList &T, string name, double biayaPerMuatan, double 
     return 0.0;
 }
 
-double KapasitasMaksimal(TruckList &T, string name){
+double KapasitasMaksimal(TruckList &T, string name)
+{
     for (adr_Truck P = first(T); P != nullptr; P = next(P))
     {
         if (info(P).name == name)
@@ -135,7 +140,8 @@ double KapasitasMaksimal(TruckList &T, string name){
     return 0.0;
 }
 
-double BensinperKapasitas(TruckList &T, string name, double bensin, double muatan, double jarak){
+double BensinperKapasitas(TruckList &T, string name, double bensin, double muatan, double jarak)
+{
     for (adr_Truck P = first(T); P != nullptr; P = next(P))
     {
         if (info(P).name == name)
@@ -148,16 +154,18 @@ double BensinperKapasitas(TruckList &T, string name, double bensin, double muata
     return 0.0;
 }
 
-void isiBensin(TruckList &T, Graph &G, string name, infotype_Truck truk, double bensin, double muatan, double jarak) {
-    Graph_Pom_Bensin A;
-    CreatePomBensin(A);
+void isiBensin(TruckList &T, Graph &G, Graph_Pom_Bensin &A, string name, infotype_Truck truk, double bensin, double muatan, double jarak)
+{
     Addr_Bensin P = FindBensin(A, name);
 
     double maksBensin = KapasitasMaksimal(T, truk.name);
 
-    for (adr_Truck R = T.first; R != nullptr; R = R->next) {
-        if (R->info.name == truk.name && P->info.nama == name) {
-            if (bensin < maksBensin) {
+    for (adr_Truck R = first(T); R != nullptr; R = next(R))
+    {
+        if (info(R).name == truk.name && info(P).nama == name)
+        {
+            if (bensin < maksBensin)
+            {
                 double neededBensin = maksBensin - bensin;
                 bensin += neededBensin;
                 cout << "Truk " << name << " telah diisi " << neededBensin << " liter gas." << endl;
@@ -169,11 +177,10 @@ void isiBensin(TruckList &T, Graph &G, string name, infotype_Truck truk, double 
     cout << "Truck dengan nama " << name << " tidak ditemukan!" << endl;
 }
 
-void HanyaLewat(TruckList &T, string name){
-    cout << "Truck " << name << " hanya lewat, tidak ada muatan yang ditambah atau dikurangi." << endl;
-}
+void HanyaLewat(TruckList &T, string name){cout << "Truck " << name << " hanya lewat, tidak ada muatan yang ditambah atau dikurangi." << endl;}
 
-bool ApakahMacetatauHambatan(Graph &G, const Infotype_Node &gudang, const Infotype_Edge &jalur){
+bool ApakahMacetatauHambatan(Graph &G, const Infotype_Node &gudang, const Infotype_Edge &jalur)
+{
     Addr_Node node = FindNode(G, gudang.nama);
     if (node != NULL)
     {
@@ -197,19 +204,38 @@ bool ApakahMacetatauHambatan(Graph &G, const Infotype_Node &gudang, const Infoty
     return false;
 }
 
-void CatatJalur(Graph &G, const Infotype_Node &gudangA, const Infotype_Node &GudangB, const Infotype_Edge &jalur, const infotype_Truck &truk) {
+void CatatJalur(Graph &G, const Infotype_Node &gudangA, const Infotype_Node &GudangB, const Infotype_Edge &jalur, const infotype_Truck &truk, string macet)
+{
     Addr_Node nodeA = FindNode(G, gudangA.nama);
     Addr_Node nodeB = FindNode(G, GudangB.nama);
-    if (nodeA != NULL && nodeB != NULL && ! info(nodeA).nama.empty() && ! info(nodeB).nama.empty()) {
-        Addr_Edge newEdge1 = AlokasiEdge({jalur.namaJalan, 0, 0});
-        if (newEdge1 != NULL) {
+    if (nodeA != Null && nodeB != Null && !info(nodeA).nama.empty() && !info(nodeB).nama.empty())
+    {
+        Addr_Edge newEdge1 = AlokasiEdge({gudangA, {}, jalur.namaJalan, 0.0, 0, (macet == "ya" && macet == "Ya") ? 1 : 0});
+        if (newEdge1 != Null)
+        {
             NextEdge(newEdge1) = FirstEdge(nodeA);
             FirstEdge(nodeA) = newEdge1;
             cout << "Jalur dari " << gudangA.nama << " melalui " << jalur.namaJalan << " ke " << GudangB.nama << " dengan truk " << truk.name << " telah dicatat." << endl;
-        } else {
+        }
+        else
+        {
             cout << "Gagal mengalokasikan edge baru." << endl;
         }
-    } else {
+
+        Addr_Edge newEdge2 = AlokasiEdge({gudangB, {}, jalur.namaJalan, 0.0, 0, (macet == "ya" && macet == "Ya") ? 1 : 0});
+        if (newEdge2 != Null)
+        {
+            NextEdge(newEdge2) = FirstEdge(nodeB);
+            FirstEdge(nodeB) = newEdge2;
+            cout << "Jalur dari " << gudangB.nama << " melalui " << jalur.namaJalan << " ke " << GudangA.nama << " dengan truk " << truk.name << " telah dicatat." << endl;
+        }
+        else
+        {
+            cout << "Gagal mengalokasikan edge baru." << endl;
+        }
+    }
+    else
+    {
         cout << "Gudang pengirim atau penerima tidak ditemukan!" << endl;
     }
 }
@@ -220,16 +246,21 @@ void CatatJalur(Graph &G, const Infotype_Node &gudangA, const Infotype_Node &Gud
              : jika ditemukan, tampilkan dan return jalur tersebut
             : jika tidak ditemukan, tampilkan pesan "Tidak ada jalur alternatif tersedia"
 
-string JalurAlternatif(Graph &G, string gudang, string jalur){
+string JalurAlternatif(Graph &G, string gudang, string jalur)
+{
     Addr_Node node = FindNode(G, gudang);
 
     if (node != NULL){
-        for (Addr_Edge P = FirstEdge(node); P != NULL; P = NextEdge(P)){
-            if (P->info.namaJalan == jalur){
-                for (Addr_Edge Q = FirstEdge(node); Q != NULL; Q = NextEdge(Q)){
-                    if (Q->info.namaJalan != jalur){
-                        cout << "Jalur alternatif yang tersedia: " << Q->info.namaJalan << endl;
-                        return Q->info.namaJalan;
+        for (Addr_Edge P = FirstEdge(node); P != NULL; P = NextEdge(P))
+        {
+            if (info(P).namaJalan == jalur)
+            {
+                for (Addr_Edge Q = FirstEdge(node); Q != NULL; Q = NextEdge(Q))
+                {
+                    if (info(Q).namaJalan != jalur)
+                    {
+                        cout << "Jalur alternatif yang tersedia: " << info(Q).namaJalan << endl;
+                        return info(Q).namaJalan;
                     }
                 }
             }
@@ -240,7 +271,8 @@ string JalurAlternatif(Graph &G, string gudang, string jalur){
 }
 */
 
-void Pengiriman(TruckList &T, Graph &G, const Infotype_Node &gudangA, const Infotype_Node &gudangB, const Infotype_Edge &jalur, const infotype_Truck &truk, double bensin, double muatan, double jarak){
+void Pengiriman(TruckList &T, Graph &G, Graph_Pom_Bensin &GPB, const Infotype_Node &gudangA, const Infotype_Node &gudangB, const Infotype_Edge &jalur, const infotype_Truck &truk, double bensin, double muatan, double jarak)
+{
     if (ApakahMacetatauHambatan(G, gudangA, jalur) || ApakahMacetatauHambatan(G, gudangB, jalur) || jalur.macet == true)
     {
         TempList jalurAlternatif;
@@ -255,7 +287,7 @@ void Pengiriman(TruckList &T, Graph &G, const Infotype_Node &gudangA, const Info
         InfoType_Bensin R;
         cout << "Masukkan lokasi pom bensin: ";
         getline(cin, R.lokasi);
-        isiBensin(T, G, R.lokasi, truk, bensin, muatan, jarak);
+        isiBensin(T, G, GPB, R.lokasi, truk, bensin, muatan, jarak);
     }
     cout << "Rute yang dipilih: " << jalur.namaJalan << " dengan bensin yang diperlukan: " << bensinDiperlukan << " liter." << endl;
 }
